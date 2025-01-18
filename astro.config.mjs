@@ -2,13 +2,11 @@ import { defineConfig } from 'astro/config'
 import svelte from '@astrojs/svelte'
 import tailwind from '@astrojs/tailwind'
 import mdx from '@astrojs/mdx'
-import node from '@astrojs/node'
+import vercel from '@astrojs/vercel'
 
 export default defineConfig({
-  output: 'server',
-  adapter: node({
-    mode: 'standalone',
-  }),
+  output: 'static',
+  adapter: vercel(),
   markdown: {
     syntaxHighlight: 'prism',
     prism: {
