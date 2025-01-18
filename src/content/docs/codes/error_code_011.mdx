@@ -1,0 +1,57 @@
+---
+title: Error Code 011
+group: Codes
+description: Explanation for Module Not Found
+priority: 11
+---
+
+## **Overview**
+This error occurs when the compiler cannot find a module specified in an `import` statement. It typically results from incorrect module names, missing files, or improper project configuration.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Specifying a module that doesn’t exist in the source directories.
+  - Typographical errors in the module name.
+  - Missing paths or misconfigured imports in the project setup.
+
+- **Example**:
+```d
+import nonexistentmodule; // Error: module `nonexistentmodule` not found
+
+void main() {
+    writeln("Hello, World!");
+}
+```
+
+- **Solution**:
+  - Ensure the module exists in the project directory structure:
+    ```d
+    // Correct module declaration in a file named mymodule.d
+    module mymodule;
+
+    void myFunction() {
+        writeln("This is my module!");
+    }
+    ```
+    - Import it properly:
+      ```d
+      import mymodule;
+
+      void main() {
+          myFunction();
+      }
+      ```
+
+  - Add the correct source paths to your project configuration:
+    ```bash
+    dmd -I./src myprogram.d
+    ```
+  - Double-check for typographical errors in the `import` statement.
+
+---
+
+## **Related Errors**
+- [Error Code 001: Undefined Identifier](./error_code_001)
+- [Error Code 007: Unresolved Symbol](./error_code_007)

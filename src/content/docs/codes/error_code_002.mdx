@@ -1,0 +1,46 @@
+---
+title: Error Code 002
+group: Codes
+description: Explanation for Circular Dependency
+priority: 2
+---
+
+## **Overview**
+This error occurs when two or more modules depend on each other in a way that forms a cycle, making it impossible for the compiler to resolve the dependencies.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Module `A` imports module `B`, and module `B` imports module `A`.
+  - Poorly designed interdependencies between modules.
+
+- **Example**:
+```d
+// a.d
+import b;
+
+// b.d
+import a; // Error: circular dependency
+```
+
+- **Solution**:
+Break the cycle by refactoring the code to eliminate mutual dependencies. Use an intermediary module if necessary.
+
+```d
+// c.d (intermediary module)
+module c;
+import shared_logic;
+
+// a.d
+import c;
+
+// b.d
+import c;
+```
+
+---
+
+## **Related Errors**
+- [Error Code 001: Undefined Identifier](./error_code_001)
+- [Error Code 003: Access Violation](./error_code_003)

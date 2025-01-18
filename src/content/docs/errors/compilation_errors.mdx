@@ -1,0 +1,156 @@
+---
+title: Compilation Errors
+group: Errors
+description: Learn about compilation errors in the D programming language, their causes, and how to resolve them.
+priority: 3
+---
+
+Compilation errors occur when the DMD compiler fails to generate valid machine code. These errors are usually caused by issues in the code's logic or structure, making it impossible for the compiler to proceed.
+
+---
+
+## What Causes Compilation Errors?
+
+Compilation errors are typically caused by:
+1. **Type Mismatches**: Using incompatible types in operations or assignments.
+2. **Missing Declarations**: Attempting to use variables or functions that haven't been declared.
+3. **Invalid Operations**: Performing operations that are not allowed.
+4. **Incorrect Function Signatures**: Providing the wrong number or types of arguments to a function.
+
+---
+
+## Examples of Compilation Errors
+
+### 1. **Type Mismatch**
+```d
+void main() {
+    int x = "string"; // Error: Cannot assign string to an int
+}
+```
+
+### 2. **Missing Declaration**
+```d
+void main() {
+    writeln(y); // Error: Undefined identifier 'y'
+}
+```
+
+### 3. **Invalid Operations**
+```d
+void main() {
+    int x = 10;
+    x = x / 0; // Error: Division by zero at compile-time
+}
+```
+
+### 4. **Incorrect Function Signature**
+```d
+void add(int a, int b) {
+    writeln(a + b);
+}
+
+void main() {
+    add(10); // Error: add expects 2 arguments but 1 was provided
+}
+```
+
+---
+
+## How to Resolve Compilation Errors
+
+### 1. **Understand Compiler Messages**
+The DMD compiler provides detailed error messages. Read them carefully to identify the issue and the line number.
+
+**Example Error Message**:
+```
+example.d(3): Error: undefined identifier 'y'
+```
+
+### 2. **Check Variable and Function Declarations**
+Ensure all variables and functions are declared before use.
+```d
+void main() {
+    int y = 10; // Declare before use
+    writeln(y);
+}
+```
+
+### 3. **Fix Type Mismatches**
+Match the types of variables and values.
+```d
+void main() {
+    int x = 10; // Correct type
+    writeln(x);
+}
+```
+
+### 4. **Validate Function Calls**
+Ensure the arguments match the function signature.
+```d
+void add(int a, int b) {
+    writeln(a + b);
+}
+
+void main() {
+    add(10, 20); // Correct number of arguments
+}
+```
+
+---
+
+## Debugging Compilation Errors
+
+### 1. **Enable Verbose Output**
+Use the `-v` flag to get more information from the compiler:
+```bash
+dmd -v example.d
+```
+
+### 2. **Run Incremental Compilation**
+Compile smaller parts of the program to isolate issues:
+```bash
+dmd -c module.d
+```
+
+### 3. **Use Static Analyzers**
+Static analysis tools like `dscanner` can identify potential issues before compilation.
+
+---
+
+## Example: Fixing a Compilation Error
+
+### Incorrect Code
+```d
+void main() {
+    writeln(x); // Error: Undefined identifier 'x'
+}
+```
+
+### Error Message
+```
+example.d(2): Error: undefined identifier 'x'
+```
+
+### Corrected Code
+```d
+void main() {
+    int x = 42;
+    writeln(x); // Prints: 42
+}
+```
+
+---
+
+## Avoiding Compilation Errors
+
+- **Enable Warnings**: Use `-w` to enable compiler warnings for additional diagnostics.
+- **Use Type Annotations**: Explicitly declare variable types to avoid type mismatches.
+- **Follow Best Practices**: Write modular code with clear function signatures and well-defined variable scopes.
+
+---
+
+## Key Takeaways
+
+- Compilation errors prevent your code from being converted into executable machine code.
+- The DMD compiler provides detailed error messages to help you debug and fix issues.
+- Ensuring proper type usage, variable declarations, and function signatures minimizes compilation errors.

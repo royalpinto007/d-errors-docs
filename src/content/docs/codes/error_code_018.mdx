@@ -1,0 +1,51 @@
+---
+title: Error Code 018
+group: Codes
+description: Explanation for Segmentation Fault
+priority: 18
+---
+
+## **Overview**
+A segmentation fault occurs when a program tries to access memory it is not allowed to. This is often caused by dereferencing invalid pointers, accessing memory out of bounds, or writing to read-only memory.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Dereferencing null or uninitialized pointers.
+  - Accessing memory beyond allocated bounds.
+  - Writing to memory marked as read-only.
+
+- **Example**:
+```d
+void main() {
+    int* ptr = null;
+    *ptr = 42; // Error: segmentation fault
+}
+```
+
+- **Solution**:
+  - Ensure pointers are initialized before use:
+    ```d
+    void main() {
+        int x = 42;
+        int* ptr = &x;
+        *ptr = 43; // Safe
+    }
+    ```
+  - Use bounds checking for arrays to prevent accessing out-of-bound elements:
+    ```d
+    void main() {
+        int[] arr = [1, 2, 3];
+        if (arr.length > 2) {
+            writeln(arr[2]); // Safe
+        }
+    }
+    ```
+  - Use modern memory-safe constructs like `@safe` or `@trusted` to reduce the likelihood of segmentation faults.
+
+---
+
+## **Related Errors**
+- [Error Code 003: Access Violation](./error_code_003)
+- [Error Code 017: Stack Overflow](./error_code_017)

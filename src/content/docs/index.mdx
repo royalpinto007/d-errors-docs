@@ -1,0 +1,137 @@
+---
+title: D Error Insights
+group: Overview
+description: A comprehensive guide to understanding and resolving errors in the D programming language.
+---
+
+import { Card, CardGrid } from '@components/mdx'
+
+<div class="hero">
+  <div class="hero-content">
+    <p class="text-xl text-[#666687] dark:text-gray-400 max-w-2xl">
+      Welcome to D Error Insights — your go-to resource for diagnosing and resolving errors in the D programming language. Explore detailed explanations, examples, and solutions for common issues.
+    </p>
+  </div>
+</div>
+
+## Get started
+
+<CardGrid>
+  <Card title="The Error Handling Problem" gradient="orange">
+    Understand the challenges of error handling in traditional programming paradigms and how D addresses them.
+  </Card>
+  <Card title="The D Error Handling Solution" gradient="green">
+    Learn how D's exception-based error handling simplifies code and enhances reliability.
+  </Card>
+  <Card title="Explore Error Functions" gradient="blue">
+    Dive into D's error reporting functions like `error`, `warning`, and `deprecation`.
+  </Card>
+  <Card title="Diagnostic Handlers" gradient="purple">
+    Customize error reporting with powerful diagnostic handlers.
+  </Card>
+</CardGrid>
+
+## Key features
+
+- **Standardized Error Handling**: A consistent approach across the D language.
+- **Graceful Defaults**: Errors are handled appropriately even if not explicitly checked.
+- **Clean Code**: Use `try/catch/finally` for structured error handling without clutter.
+- **Comprehensive Documentation**: Detailed insights into error classifications, reporting functions, and handlers.
+- **Interactive Learning**: Examples to illustrate error causes and fixes.
+
+## Understanding Errors
+
+### The Error Handling Problem
+Errors are unexpected conditions that disrupt the normal operation of a program. Examples include:
+- Out of memory
+- Invalid file name
+- Attempting to read a non-existent file
+
+Traditional error handling in C is inconsistent and often cumbersome, requiring:
+- Checking return values
+- Interpreting error codes
+- Managing explicit error propagation
+
+### The D Error Handling Solution
+D solves these problems with a standardized, exception-based error handling system:
+- Errors are objects derived from the `Error` class.
+- The `toString()` method provides a human-readable description of the error.
+- Errors are propagated via stack unwinding and handled gracefully if unhandled.
+
+## Explore Functions
+
+<CardGrid>
+  <Card title="error()" gradient="red">
+    Print an error message, increasing the global error count.
+  </Card>
+  <Card title="warning()" gradient="yellow">
+    Issue warnings and manage global warning counts.
+  </Card>
+  <Card title="deprecation()" gradient="pink">
+    Notify users about deprecated features with optional error counts.
+  </Card>
+  <Card title="message()" gradient="cyan">
+    Print verbose messages for additional context.
+  </Card>
+</CardGrid>
+
+## Ready to dive deeper?
+
+<div class="cta-grid">
+  <a href="/error-handling-problem" class="cta-card primary">
+    <h3>Learn more about the problem →</h3>
+    <p>Understand the challenges and pitfalls of traditional error handling.</p>
+  </a>
+  <a href="/error-functions" class="cta-card secondary">
+    <h3>Explore error functions →</h3>
+    <p>Dive into the core functions for error reporting and diagnostics.</p>
+  </a>
+  <a href="/diagnostic-handlers" class="cta-card secondary">
+    <h3>Master diagnostic handlers →</h3>
+    <p>Customize how errors are reported and managed in your programs.</p>
+  </a>
+</div>
+
+<style>
+  {`
+.hero {
+  @apply -mx-4 sm:-mx-8 -mt-6 mb-12 py-12 px-4 sm:px-8 bg-gradient-to-br from-purple-500/5 to-pink-500/5 dark:from-purple-500/10 dark:to-pink-500/10 border-b border-[#DCDCE4] dark:border-gray-800;
+}
+
+.hero-content {
+  @apply max-w-4xl mx-auto text-center;
+}
+
+.cta-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 my-8;
+}
+
+.cta-card {
+  @apply block p-6 rounded-lg border border-[#DCDCE4] dark:border-gray-800 transition-all duration-300 hover:scale-[1.02] no-underline;
+}
+
+.cta-card.primary {
+  @apply bg-gradient-to-br from-purple-500 to-pink-500 border-0;
+}
+
+.cta-card.primary h3 {
+  @apply text-white font-medium mb-1;
+}
+
+.cta-card.primary p {
+  @apply text-white/90 text-sm;
+}
+
+.cta-card.secondary {
+  @apply bg-white dark:bg-gray-900/50;
+}
+
+.cta-card.secondary h3 {
+  @apply text-[#19191C] dark:text-white font-medium mb-1;
+}
+
+.cta-card.secondary p {
+  @apply text-[#666687] dark:text-gray-400 text-sm;
+}
+`}
+</style>

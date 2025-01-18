@@ -1,0 +1,46 @@
+---
+title: Error Code 005
+group: Codes
+description: Explanation for Immutable Assignment
+priority: 5
+---
+
+## **Overview**
+This error occurs when you try to assign a new value to a variable or object marked as `immutable`. Immutable variables cannot be modified after their initial assignment.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Attempting to modify an `immutable` variable.
+  - Reassigning a value to a property of an immutable object.
+
+- **Example**:
+```d
+void main() {
+    immutable int x = 5;
+    x = 10; // Error: cannot modify immutable variable `x`
+}
+```
+
+- **Solution**:
+  - Use `mutable` or `const` instead of `immutable` if modification is necessary:
+    ```d
+    void main() {
+        int x = 5;
+        x = 10; // Valid
+    }
+    ```
+  - Reassign values to new variables if immutability must be preserved:
+    ```d
+    void main() {
+        immutable int x = 5;
+        int y = x + 5; // Assign to a new variable
+    }
+    ```
+
+---
+
+## **Related Errors**
+- [Error Code 003: Access Violation](./error_code_003)
+- [Error Code 004: Missing Return Statement](./error_code_004)

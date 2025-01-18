@@ -1,0 +1,57 @@
+---
+title: Error Code 008
+group: Codes
+description: Explanation for Division by Zero
+priority: 8
+---
+
+## **Overview**
+This error occurs when an attempt is made to divide a number by zero. In most cases, this results in a runtime error or an exception, as division by zero is undefined.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Dividing by a variable that has a value of zero.
+  - Using hardcoded zero as a divisor in calculations.
+
+- **Example**:
+```d
+void main() {
+    int x = 10;
+    int y = 0;
+    int result = x / y; // Error: division by zero
+}
+```
+
+- **Solution**:
+  - Ensure the divisor is non-zero before performing the division:
+    ```d
+    void main() {
+        int x = 10;
+        int y = 2;
+        if (y != 0) {
+            int result = x / y;
+            writeln(result); // Safe
+        }
+    }
+    ```
+  - Handle potential zero division with error handling:
+    ```d
+    void safeDivide(int x, int y) {
+        try {
+            if (y == 0) {
+                throw new Exception("Cannot divide by zero.");
+            }
+            writeln(x / y);
+        } catch (Exception e) {
+            writeln(e.msg);
+        }
+    }
+    ```
+
+---
+
+## **Related Errors**
+- [Error Code 003: Access Violation](./error_code_003)
+- [Error Code 006: Type Mismatch](./error_code_006)

@@ -1,0 +1,43 @@
+---
+title: Error Code 004
+group: Codes
+description: Explanation for Missing Return Statement
+priority: 4
+---
+
+## **Overview**
+This error occurs when a function with a non-void return type does not return a value in all code paths.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Forgetting to add a `return` statement in a function with a non-void return type.
+  - Conditional branches that do not return a value in all cases.
+
+- **Example**:
+```d
+int add(int a, int b) {
+    if (a > 0) {
+        return a + b;
+    }
+    // Error: missing return statement
+}
+```
+
+- **Solution**:
+Ensure all code paths in the function return a value:
+```d
+int add(int a, int b) {
+    if (a > 0) {
+        return a + b;
+    }
+    return 0; // Default return value
+}
+```
+
+---
+
+## **Related Errors**
+- [Error Code 001: Undefined Identifier](./error_code_001)
+- [Error Code 003: Access Violation](./error_code_003)

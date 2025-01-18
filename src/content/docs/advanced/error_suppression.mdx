@@ -1,0 +1,141 @@
+---
+title: Error Suppression and Gagging
+group: Advanced
+description: Learn how to suppress errors and manage gagging in the D programming language.
+priority: 3
+---
+
+Error suppression and gagging in the D programming language allow developers to control how and when errors are displayed. This is useful for managing noisy outputs during compilation or testing specific sections of code.
+
+---
+
+## What is Error Gagging?
+
+Error gagging temporarily suppresses error messages without permanently silencing them. Errors can still be retrieved and processed programmatically.
+
+### Common Use Cases:
+- **Avoiding Noise**: Suppress irrelevant errors during specific compilation stages.
+- **Selective Debugging**: Enable or disable errors for particular modules or functions.
+- **Testing**: Verify behavior without exposing all error messages.
+
+---
+
+## How to Gag Errors in DMD
+
+Use the `-w` and `-verror` compiler flags for error suppression:
+
+1. **`-w`**: Suppress all warnings.
+2. **`-verrors=<number>`**: Limit the number of errors reported.
+
+### Example: Suppressing Warnings
+```bash
+dmd -w example.d
+```
+
+This suppresses all warnings but still reports errors.
+
+### Example: Limiting Error Reports
+```bash
+dmd -verrors=1 example.d
+```
+
+This reports only the first error and suppresses subsequent errors.
+
+---
+
+## Gagging Errors Programmatically
+
+In the DMD codebase, errors can be gagged using the `errors.gag` property.
+
+### Example: Suppressing Errors in Code
+```d
+import dmd.errors;
+
+void main() {
+    error.gag = true; // Suppress errors
+    error("This error will not be displayed.");
+    error.gag = false; // Resume error reporting
+    error("This error will be displayed.");
+}
+```
+
+**Output**:
+```
+Error: This error will be displayed.
+```
+
+---
+
+## Accessing Suppressed Errors
+
+Even when errors are gagged, they are still recorded and can be retrieved using the `error.gaggedErrors` property.
+
+### Example: Retrieving Gagged Errors
+```d
+import dmd.errors;
+
+void main() {
+    error.gag = true;
+    error("Suppressed error 1");
+    error("Suppressed error 2");
+    error.gag = false;
+
+    foreach (err; error.gaggedErrors) {
+        writeln("Gagged Error: ", err.msg);
+    }
+}
+```
+
+**Output**:
+```
+Gagged Error: Suppressed error 1
+Gagged Error: Suppressed error 2
+```
+
+---
+
+## Advanced Usage
+
+### Dynamic Error Gagging
+Toggle gagging dynamically based on conditions:
+```d
+if (debugMode) {
+    error.gag = false; // Enable errors in debug mode
+} else {
+    error.gag = true; // Suppress errors in production
+}
+```
+
+### Combining Flags
+Combine gagging with other flags for granular control:
+```bash
+dmd -w -verrors=2 example.d
+```
+- Suppresses warnings (`-w`).
+- Limits error reports to two (`-verrors=2`).
+
+---
+
+## Best Practices for Error Suppression
+
+1. **Gag Only When Necessary**: Suppressing all errors can hide critical issues.
+2. **Log Suppressed Errors**: Always log or record suppressed errors for later review.
+3. **Use in Testing**: Temporarily suppress errors to test specific conditions without noise.
+
+---
+
+## Debugging Gagging Issues
+
+1. **Verify Gagging State**: Check the value of `error.gag` to ensure errors are being gagged or reported as intended.
+2. **Retrieve Suppressed Errors**: Use `error.gaggedErrors` to inspect suppressed messages.
+3. **Check Compiler Flags**: Ensure flags like `-w` or `-verrors` are correctly configured.
+
+---
+
+## Key Takeaways
+
+- Error suppression (`gagging`) temporarily hides errors while allowing them to be retrieved programmatically.
+- Use `-w` and `-verrors` flags to suppress warnings or limit error reports during compilation.
+- Always log suppressed errors for better debugging and diagnostics.
+
+Explore more error handling techniques in the **Advanced** section to enhance your understanding of D's powerful diagnostics capabilities.

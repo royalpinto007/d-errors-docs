@@ -1,0 +1,195 @@
+---
+title: Custom Error Types
+group: Advanced
+description: Learn how to create and use custom error types in the D programming language.
+priority: 1
+---
+
+In the D programming language, you can define custom error types to handle specific error scenarios in a structured way. This improves error reporting and makes your code more readable and maintainable.
+
+---
+
+## Why Use Custom Error Types?
+
+1. **Specificity**: Clearly define and distinguish between different kinds of errors.
+2. **Enhanced Debugging**: Add detailed context for debugging and diagnostics.
+3. **Consistency**: Standardize error handling across your codebase.
+
+---
+
+## Creating a Custom Error Type
+
+Custom error types are created by subclassing the `Error` class.
+
+### Example: A Custom Error for File Operations
+```d
+import std.stdio;
+
+class FileError : Error {
+    this(string msg) {
+        super(msg); // Call the base class constructor
+    }
+}
+
+void main() {
+    try {
+        throw new FileError("Failed to open file: config.json");
+    } catch (FileError e) {
+        writeln("Caught a FileError: ", e.msg);
+    }
+}
+```
+
+**Output**:
+```
+Caught a FileError: Failed to open file: config.json
+```
+
+---
+
+## Adding Context to Custom Errors
+
+You can include additional information in your custom error types, such as file paths or error codes.
+
+### Example: Error with Additional Context
+```d
+class FileError : Error {
+    string filePath;
+
+    this(string msg, string filePath) {
+        super(msg);
+        this.filePath = filePath;
+    }
+
+    override string toString() const {
+        return super.toString() ~ " (File: " ~ filePath ~ ")";
+    }
+}
+
+void main() {
+    try {
+        throw new FileError("Failed to read file", "config.json");
+    } catch (FileError e) {
+        writeln(e.toString());
+    }
+}
+```
+
+**Output**:
+```
+std.exception.FileError@runtime(1): Failed to read file (File: config.json)
+```
+
+---
+
+## Custom Error Hierarchies
+
+For larger projects, you can organize custom errors into hierarchies.
+
+### Example: Defining an Error Hierarchy
+```d
+class AppError : Error {
+    this(string msg) {
+        super(msg);
+    }
+}
+
+class DatabaseError : AppError {
+    this(string msg) {
+        super(msg);
+    }
+}
+
+class NetworkError : AppError {
+    this(string msg) {
+        super(msg);
+    }
+}
+
+void main() {
+    try {
+        throw new DatabaseError("Database connection failed");
+    } catch (AppError e) {
+        writeln("Caught an AppError: ", e.msg);
+    }
+}
+```
+
+**Output**:
+```
+Caught an AppError: Database connection failed
+```
+
+---
+
+## Best Practices for Custom Errors
+
+1. **Use Descriptive Names**: Clearly indicate the error's purpose (e.g., `FileError`, `DatabaseError`).
+2. **Provide Context**: Include relevant details like file names or error codes.
+3. **Leverage Hierarchies**: Organize related errors under a common base class.
+4. **Document Errors**: Clearly explain the purpose and usage of each custom error type.
+
+---
+
+## Debugging Custom Errors
+
+### Logging Custom Errors
+Use logging libraries to log detailed error information:
+```d
+import std.experimental.logger;
+
+class FileError : Error {
+    string filePath;
+
+    this(string msg, string filePath) {
+        super(msg);
+        this.filePath = filePath;
+    }
+}
+
+void main() {
+    try {
+        throw new FileError("File not found", "data.csv");
+    } catch (FileError e) {
+        logError("Error: ", e.toString());
+    }
+}
+```
+
+---
+
+## Example: Combining Custom Errors and Diagnostic Handlers
+
+Custom errors can be paired with diagnostic handlers for enhanced reporting.
+
+```d
+import dmd.errors;
+
+class CustomError : Error {
+    this(string msg) {
+        super(msg);
+    }
+}
+
+void main() {
+    DiagnosticHandler customHandler = (ref const(Loc) loc, Color headerColor, const(char)* header, const(char)* messageFormat, __va_list_tag* args, const(char)* prefix1, const(char)* prefix2) nothrow {
+        writeln("Custom diagnostic: ", header, " - ", format(messageFormat, args));
+        return true;
+    };
+
+    diagnosticHandler = customHandler;
+
+    throw new CustomError("A custom error occurred");
+}
+```
+
+---
+
+## Key Takeaways
+
+- Custom error types improve error specificity and enhance debugging.
+- Add meaningful context to errors with additional fields and custom `toString()` methods.
+- Use error hierarchies for better organization in large projects.
+- Pair custom errors with diagnostic handlers or logging for robust error reporting.
+
+Explore more advanced error handling techniques in the **Advanced** section.

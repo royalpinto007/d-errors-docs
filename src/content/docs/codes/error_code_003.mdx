@@ -1,0 +1,50 @@
+---
+title: Error Code 003
+group: Codes
+description: Explanation for Access Violation
+priority: 3
+---
+
+## **Overview**
+This error occurs when a program attempts to access memory it is not allowed to. This can happen due to dereferencing null or invalid pointers or accessing memory outside the bounds of an array.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Dereferencing a null or uninitialized pointer.
+  - Accessing an array index that is out of bounds.
+  - Writing to read-only memory.
+
+- **Example**:
+```d
+void main() {
+    int* ptr = null;
+    *ptr = 42; // Error: access violation
+}
+```
+
+- **Solution**:
+  - Ensure pointers are initialized before use:
+    ```d
+    void main() {
+        int value = 42;
+        int* ptr = &value;
+        *ptr = 43; // Safe
+    }
+    ```
+  - Use bounds checking for arrays:
+    ```d
+    void main() {
+        int[] arr = [1, 2, 3];
+        if (arr.length > 2) {
+            writeln(arr[2]); // Safe
+        }
+    }
+    ```
+
+---
+
+## **Related Errors**
+- [Error Code 001: Undefined Identifier](./error_code_001)
+- [Error Code 002: Circular Dependency](./error_code_002)

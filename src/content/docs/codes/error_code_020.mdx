@@ -1,0 +1,52 @@
+---
+title: Error Code 020
+group: Codes
+description: Explanation for Symbol Redefined
+priority: 20
+---
+
+## **Overview**
+This error occurs when a variable, function, or other symbol is defined multiple times in the same scope, causing a conflict. The compiler cannot determine which definition to use, leading to an error.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Declaring variables with the same name in the same scope.
+  - Duplicating function definitions or class members.
+  - Importing modules that define conflicting symbols.
+
+- **Example**:
+```d
+void main() {
+    int value = 10;
+    int value = 20; // Error: symbol `value` redefined
+}
+```
+
+- **Solution**:
+  - Use unique names for variables and functions in the same scope:
+    ```d
+    void main() {
+        int value1 = 10;
+        int value2 = 20;
+        writeln(value1, value2); // No conflict
+    }
+    ```
+  - Check imported modules for conflicting definitions and use selective imports or aliases:
+    ```d
+    import module1 : func1;
+    import module2 : func1 as func2;
+
+    void main() {
+        func1();
+        func2();
+    }
+    ```
+  - Avoid redefining symbols by ensuring each is uniquely declared.
+
+---
+
+## **Related Errors**
+- [Error Code 001: Undefined Identifier](./error_code_001)
+- [Error Code 007: Unresolved Symbol](./error_code_007)

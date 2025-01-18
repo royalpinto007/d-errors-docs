@@ -1,0 +1,174 @@
+---
+title: Compiler Internals
+group: Internals
+description: Explore how the DMD compiler processes and handles errors during compilation.
+priority: 2
+---
+
+Understanding how the DMD compiler processes errors internally provides valuable insights into its architecture and design. This section dives into the error-handling mechanisms, from error generation to reporting.
+
+---
+
+## Error Lifecycle in the DMD Compiler
+
+Errors in the DMD compiler follow a structured lifecycle:
+
+1. **Error Detection**
+   - The compiler detects errors during various phases of compilation (e.g., syntax analysis, semantic analysis).
+   - Errors are categorized based on their type and severity.
+
+2. **Error Logging**
+   - Detected errors are logged using utilities like `error()`, `warning()`, and `errorSupplemental()`.
+   - Errors are stored in an internal data structure for further processing.
+
+3. **Error Reporting**
+   - Errors are formatted and output to the console or redirected to files (e.g., SARIF output).
+   - The reporting process uses utilities like `verrorReport()` and `diagnosticHandler`.
+
+---
+
+## Phases of Error Processing
+
+### **1. Lexical Analysis**
+   - Detects errors related to tokens, such as illegal characters.
+   - **Example**: "Unexpected character `#` at line 3."
+
+### **2. Syntax Analysis**
+   - Checks for syntactical correctness based on grammar rules.
+   - **Example**: "Missing semicolon at the end of the statement."
+
+### **3. Semantic Analysis**
+   - Validates the meaning and type correctness of code.
+   - **Example**: "Undefined variable `x`."
+
+### **4. Code Generation**
+   - Errors encountered during intermediate code generation.
+   - **Example**: "Division by zero in constant expression."
+
+### **5. Linking**
+   - Errors in the final linking phase, such as unresolved symbols.
+   - **Example**: "Module `math` not found."
+
+---
+
+## Error Propagation
+
+Errors propagate through the following internal structures:
+
+1. **`ErrorSinkCompiler`**
+   - Acts as the primary sink for error messages in the compiler.
+   - Stores errors for later retrieval and formatting.
+
+2. **`DiagnosticHandler`**
+   - Provides hooks for custom error processing.
+   - Developers can override the default handler to log or redirect errors.
+
+3. **`ErrorKind`**
+   - Categorizes errors to determine their severity and behavior.
+   - Works closely with functions like `verrorReport()`.
+
+---
+
+## Error Structures and Utilities
+
+### **`Loc`**
+   - Represents the location of an error in the source code (file, line, column).
+   - Example:
+     ```d
+     Loc loc = { "example.d", 10, 5 };
+     ```
+
+### **`ErrorSinkCompiler`**
+   - Internal class responsible for storing and managing errors.
+   - Example:
+     ```d
+     ErrorSinkCompiler errorSink;
+     errorSink.reportError(loc, "Undefined identifier `x`.");
+     ```
+
+### **`verrorReport()`**
+   - The core utility for logging errors with detailed metadata.
+   - Example:
+     ```d
+     verrorReport(loc, "Syntax error: unexpected token `%s`", ap, ErrorKind.error, null, null);
+     ```
+
+---
+
+## SARIF Integration
+
+The DMD compiler supports SARIF (Static Analysis Results Interchange Format) for structured error reporting. This integration allows:
+- **Standardized Reporting**: Errors are formatted in a universal JSON schema.
+- **Tool Compatibility**: Errors can be consumed by tools like Visual Studio Code and GitHub Actions.
+
+### Example SARIF Output:
+```json
+{
+    "version": "2.1.0",
+    "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0.json",
+    "runs": [
+        {
+            "tool": {
+                "driver": {
+                    "name": "Digital Mars D",
+                    "version": "2.100.0",
+                    "informationUri": "https://dlang.org/dmd.html"
+                }
+            },
+            "results": [
+                {
+                    "ruleId": "DMD-error",
+                    "message": {
+                        "text": "Undefined identifier `x`"
+                    },
+                    "locations": [
+                        {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                    "uri": "example.d"
+                                },
+                                "region": {
+                                    "startLine": 10,
+                                    "startColumn": 5
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+
+---
+
+## Debugging Error Processing
+
+1. **Enable Verbose Logging**
+   - Use the `-v` flag during compilation to see detailed logs.
+
+2. **Inspect Internal Data Structures**
+   - Debug the `ErrorSinkCompiler` class to track how errors are stored.
+
+3. **Test Custom Diagnostic Handlers**
+   - Override the default `DiagnosticHandler` to redirect errors to custom logs.
+
+---
+
+## Best Practices for Understanding Compiler Internals
+
+1. **Study Source Code**: Familiarize yourself with the `errors.d` and `errorsink.d` modules in the DMD codebase.
+2. **Use Compiler Flags**: Experiment with flags like `-verrors` and `-verror-style` to observe how errors are handled.
+3. **Test Edge Cases**: Write test cases to explore how DMD reacts to different error scenarios.
+
+---
+
+## Key Takeaways
+
+- Errors in the DMD compiler are processed through structured phases, from detection to reporting.
+- Core structures like `ErrorSinkCompiler` and utilities like `verrorReport()` play a pivotal role in error management.
+- SARIF integration enhances error reporting by providing a standardized format for diagnostics.
+- Debugging compiler internals helps understand error flow and customize diagnostics for your needs.
+
+Continue exploring other **Internals** topics to deepen your understanding of D's compiler architecture.

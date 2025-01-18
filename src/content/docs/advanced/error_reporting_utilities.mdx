@@ -1,0 +1,193 @@
+---
+title: Error Reporting Utilities
+group: Advanced
+description: Explore utilities for enhancing and customizing error reporting in D.
+priority: 4
+---
+
+Error reporting utilities in D provide developers with tools to customize, enhance, and streamline the way errors are presented and handled. These utilities are particularly useful for building robust and user-friendly applications.
+
+---
+
+## Key Utilities for Error Reporting
+
+### 1. `error()`
+The `error()` function is used to log error messages and increment the global error count.
+
+#### Syntax:
+```d
+void error(const(char)* filename, uint line, uint column, const(char)* format, ...);
+```
+
+#### Example:
+```d
+import dmd.errors;
+
+void main() {
+    error("example.d", 10, 15, "Syntax error: unexpected token");
+}
+```
+
+**Output**:
+```
+Error: example.d(10,15): Syntax error: unexpected token
+```
+
+---
+
+### 2. `warning()`
+The `warning()` function logs warning messages and increments the global warning count.
+
+#### Syntax:
+```d
+void warning(const(char)* filename, uint line, uint column, const(char)* format, ...);
+```
+
+#### Example:
+```d
+warning("example.d", 20, 5, "Deprecated feature used");
+```
+
+**Output**:
+```
+Warning: example.d(20,5): Deprecated feature used
+```
+
+---
+
+### 3. `message()`
+The `message()` function logs verbose informational messages. It doesn’t affect error or warning counts.
+
+#### Syntax:
+```d
+void message(const(char)* filename, uint line, uint column, const(char)* format, ...);
+```
+
+#### Example:
+```d
+message("example.d", 30, 10, "File successfully parsed.");
+```
+
+**Output**:
+```
+Message: example.d(30,10): File successfully parsed.
+```
+
+---
+
+### 4. Supplemental Reporting Functions
+
+#### `errorSupplemental()`
+Provides additional details about an error without increasing the error count.
+
+#### Example:
+```d
+import dmd.errors;
+
+void main() {
+    error("example.d", 12, 8, "Failed to load configuration.");
+    errorSupplemental("example.d", 13, 10, "Check if the file exists.");
+}
+```
+
+**Output**:
+```
+Error: example.d(12,8): Failed to load configuration.
+       example.d(13,10): Check if the file exists.
+```
+
+---
+
+## Combining Utilities for Enhanced Reporting
+
+### Example: Custom Error Logger
+```d
+import dmd.errors;
+
+void logError(string filename, uint line, uint column, string details, string solution) {
+    error(filename, line, column, details);
+    errorSupplemental(filename, line + 1, column, solution);
+}
+
+void main() {
+    logError("example.d", 15, 5, "Variable `x` is undefined", "Declare the variable before using it.");
+}
+```
+
+**Output**:
+```
+Error: example.d(15,5): Variable `x` is undefined
+       example.d(16,5): Declare the variable before using it.
+```
+
+---
+
+## Advanced Usage
+
+### Custom Error Prefixes
+Customize prefixes for error and warning messages:
+```d
+import dmd.errors;
+
+void main() {
+    string prefix1 = "[CustomPrefix]";
+    string prefix2 = "[Details]";
+
+    error("example.d", 10, 5, "An error occurred: %s", "Invalid operation", prefix1, prefix2);
+}
+```
+
+**Output**:
+```
+[CustomPrefix][Details] example.d(10,5): An error occurred: Invalid operation
+```
+
+---
+
+### Utility Integration with Diagnostic Handlers
+Pair utilities with diagnostic handlers for centralized logging.
+
+#### Example:
+```d
+import dmd.errors;
+import std.stdio;
+
+void main() {
+    DiagnosticHandler customHandler = (ref const(Loc) loc, Color headerColor, const(char)* header, const(char)* messageFormat, __va_list_tag* args, const(char)* prefix1, const(char)* prefix2) nothrow {
+        writeln("Custom Log: ", header, " - ", format(messageFormat, args));
+        return true; // Skip default printing
+    };
+
+    diagnosticHandler = customHandler;
+
+    error("example.d", 12, 8, "Custom error reporting in action.");
+}
+```
+
+---
+
+## Best Practices for Error Reporting
+
+1. **Use Supplemental Messages**: Provide actionable details with `errorSupplemental()` and `warningSupplemental()`.
+2. **Log Verbosely**: Use `message()` for debugging and tracing without affecting error or warning counts.
+3. **Centralize Logging**: Combine utilities with diagnostic handlers for consistent reporting.
+4. **Avoid Redundancy**: Avoid repeating the same details across multiple utilities.
+
+---
+
+## Debugging and Enhancing Reporting
+
+1. **Analyze Error Flow**: Use logs to trace how errors propagate through the code.
+2. **Validate Message Format**: Ensure error and supplemental messages are clear and actionable.
+3. **Customize for Context**: Tailor error reporting to match the needs of your application or toolchain.
+
+---
+
+## Key Takeaways
+
+- D provides a rich set of utilities for structured error, warning, and informational message reporting.
+- Supplemental functions enhance error messages with additional context.
+- Combine utilities with custom handlers or centralized logging for robust error management.
+- Adopt best practices for clarity, consistency, and actionable diagnostics.
+
+Explore other **Advanced Topics** for more insights into D's error handling and reporting capabilities.

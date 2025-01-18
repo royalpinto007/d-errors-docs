@@ -1,0 +1,59 @@
+---
+title: Error Code 014
+group: Codes
+description: Explanation for Function Overload Ambiguity
+priority: 14
+---
+
+## **Overview**
+This error occurs when the compiler encounters multiple function overloads that match a given call, and it cannot determine which one to use. This is often caused by overlapping or ambiguous parameter types in the overloads.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Overloading functions with parameters that can implicitly convert to other types.
+  - Ambiguous calls where the compiler cannot decide which function to use.
+
+- **Example**:
+```d
+void foo(int x) {
+    writeln("Called foo(int)");
+}
+
+void foo(float x) {
+    writeln("Called foo(float)");
+}
+
+void main() {
+    foo(42); // Error: ambiguous call
+}
+```
+
+- **Solution**:
+  - Use explicit casting to resolve ambiguity:
+    ```d
+    void main() {
+        foo(cast(int) 42); // Explicitly call foo(int)
+    }
+    ```
+  - Avoid ambiguous overloads by designing the function signatures to be more distinct:
+    ```d
+    void foo(int x) {
+        writeln("Called foo(int)");
+    }
+
+    void foo(string x) {
+        writeln("Called foo(string)");
+    }
+
+    void main() {
+        foo(42); // Calls foo(int)
+    }
+    ```
+
+---
+
+## **Related Errors**
+- [Error Code 006: Type Mismatch](./error_code_006)
+- [Error Code 007: Unresolved Symbol](./error_code_007)

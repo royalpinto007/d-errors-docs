@@ -1,0 +1,146 @@
+---
+title: Error Categorization and Prioritization
+group: Internals
+description: Understand how errors are categorized and prioritized in the D programming language.
+priority: 1
+---
+
+Effective error management in D involves categorizing errors based on their type and severity, and prioritizing them to help developers focus on the most critical issues first. This section explains the internal mechanisms of error categorization and prioritization used by the DMD compiler.
+
+---
+
+## Error Categories
+
+The DMD compiler categorizes errors using the `ErrorKind` and `Classification` enums. These help classify errors into distinct types, each serving a specific purpose.
+
+### **`ErrorKind`**
+Defines the kind of error being reported:
+- **`error`**: General errors that halt compilation.
+- **`warning`**: Non-critical issues that do not stop compilation but require attention.
+- **`deprecation`**: Indicates usage of deprecated features.
+- **`note`**: Additional context or hints related to the reported issue.
+
+#### Example:
+```d
+enum ErrorKind {
+    error,
+    warning,
+    deprecation,
+    note
+}
+```
+
+### **`Classification`**
+Defines the color coding for errors to improve readability in output:
+- **`error`**: Highlighted in red for critical issues.
+- **`warning`**: Highlighted in yellow for non-critical warnings.
+- **`deprecation`**: Highlighted in cyan for deprecated features.
+- **`tip`**: Highlighted in green for helpful suggestions.
+
+---
+
+## Error Prioritization
+
+The DMD compiler processes and prioritizes errors to ensure the most critical issues are addressed first. The prioritization strategy is as follows:
+
+### **1. Fatal Errors**
+These are the highest priority and result in immediate termination of the compilation process.
+#### Examples:
+- Syntax errors
+- Missing modules
+- Unresolvable symbols
+
+### **2. Non-Fatal Errors**
+These errors allow the compilation to proceed but indicate issues that must be fixed.
+#### Examples:
+- Type mismatches
+- Invalid operations
+
+### **3. Warnings**
+Warnings are non-critical but highlight potential issues in the code that might lead to errors later.
+#### Examples:
+- Use of uninitialized variables
+- Implicit type conversions
+
+### **4. Deprecations**
+Deprecation warnings inform users about features that are slated for removal in future versions of the language.
+#### Examples:
+- Use of deprecated functions or syntax
+
+---
+
+## How Errors Are Categorized Internally
+
+The DMD compiler uses helper functions and properties to assign categories and prioritize errors:
+
+### **`error()` Function**
+Logs a general error with location and description.
+#### Example:
+```d
+error("example.d", 10, 5, "Undefined variable `x`.");
+```
+
+### **`warning()` Function**
+Logs a warning message with optional location details.
+#### Example:
+```d
+warning("example.d", 20, 8, "Use of deprecated function `foo()`.");
+```
+
+### **`errorSupplemental()`**
+Provides additional information about an error.
+#### Example:
+```d
+error("example.d", 12, 6, "Type mismatch.");
+errorSupplemental("example.d", 13, 8, "Expected `int`, found `string`.");
+```
+
+### **`verrorReport()`**
+A more generalized function for reporting errors, warnings, and notes.
+#### Example:
+```d
+verrorReport(loc, "Unexpected token `%s`", ap, ErrorKind.error, null, null);
+```
+
+---
+
+## Error Output Example
+
+### Code:
+```d
+void main() {
+    x = 5; // Undefined variable
+    deprecatedFunction(); // Deprecated feature
+}
+```
+
+### Compilation Command:
+```bash
+dmd -verrors=2 example.d
+```
+
+### Output:
+```
+Error: example.d(2,5): undefined identifier `x`
+Warning: example.d(3,5): use of deprecated function `deprecatedFunction()`
+```
+
+---
+
+## Best Practices for Categorization and Prioritization
+
+1. **Handle Fatal Errors First**: Ensure critical issues are resolved before addressing non-fatal errors or warnings.
+2. **Log Supplemental Details**: Use functions like `errorSupplemental()` to provide actionable context for complex errors.
+3. **Limit Noise**: Use flags like `-verrors` to focus on a manageable number of errors at a time.
+4. **Review Warnings Regularly**: Treat warnings as potential future errors and address them proactively.
+
+---
+
+## Key Takeaways
+
+- **ErrorKind** and **Classification** enums help categorize errors by type and severity.
+- Prioritization ensures critical issues are highlighted first.
+- Use supplemental functions for clarity and actionable error messages.
+- Follow best practices to streamline debugging and error resolution.
+
+Explore the next section on **Compiler Internals** to understand how the DMD compiler processes these errors behind the scenes.

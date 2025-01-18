@@ -1,0 +1,48 @@
+---
+title: Error Code 016
+group: Codes
+description: Explanation for Unreachable Code Detected
+priority: 16
+---
+
+## **Overview**
+This error occurs when the compiler detects code that cannot be executed under any circumstances. Unreachable code often indicates logical errors, redundant code, or mistakes in control flow.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Code placed after a `return`, `break`, `continue`, or `throw` statement.
+  - Infinite loops that prevent subsequent code from executing.
+  - Conditional branches that always evaluate to the same outcome.
+
+- **Example**:
+```d
+void main() {
+    return;
+    writeln("This will never be executed."); // Error: unreachable code
+}
+```
+
+- **Solution**:
+  - Remove or refactor unreachable code to clean up the logic:
+    ```d
+    void main() {
+        writeln("Executed code."); // Valid
+    }
+    ```
+  - Check control flow for redundant branches or unnecessary statements:
+    ```d
+    void example(int x) {
+        if (x > 0) {
+            return;
+        }
+        writeln("Negative or zero."); // Ensure this is reachable
+    }
+    ```
+
+---
+
+## **Related Errors**
+- [Error Code 003: Access Violation](./error_code_003)
+- [Error Code 014: Function Overload Ambiguity](./error_code_014)

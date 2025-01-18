@@ -1,0 +1,47 @@
+---
+title: Error Code 019
+group: Codes
+description: Explanation for Deprecated Feature Used
+priority: 19
+---
+
+## **Overview**
+This error occurs when a program uses a feature or functionality that has been marked as deprecated. While deprecated features are still functional, they are scheduled for removal in future versions and should be avoided.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Using library functions or language features marked as deprecated.
+  - Failing to update code after deprecation warnings in previous versions.
+
+- **Example**:
+```d
+void oldFunction() {
+    deprecated("Use newFunction instead") void deprecatedFunction() {
+        writeln("Deprecated function called.");
+    }
+
+    deprecatedFunction(); // Error: deprecated feature used
+}
+```
+
+- **Solution**:
+  - Replace deprecated features with their recommended alternatives:
+    ```d
+    void newFunction() {
+        writeln("This is the new function.");
+    }
+
+    void main() {
+        newFunction(); // Use the updated feature
+    }
+    ```
+  - Check release notes and documentation for deprecated features and their replacements.
+  - Use compiler warnings to identify deprecated features early.
+
+---
+
+## **Related Errors**
+- [Error Code 005: Immutable Assignment](./error_code_005)
+- [Error Code 014: Function Overload Ambiguity](./error_code_014)

@@ -1,0 +1,47 @@
+---
+title: Error Code 001
+group: Codes
+description: Explanation for Undefined Identifier
+priority: 1
+---
+
+## **Overview**
+This error occurs when the compiler encounters an identifier (e.g., variable, function) that hasn’t been defined or imported in the current scope.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Misspelling a variable or function name.
+  - Forgetting to declare the identifier before use.
+  - Missing an `import` statement for external modules.
+
+- **Example**:
+```d
+void main() {
+    x = 5; // Error: undefined identifier `x`
+}
+```
+
+- **Solution**:
+Declare or define the missing identifier:
+```d
+void main() {
+    int x = 5;
+}
+```
+
+Or ensure the correct module is imported:
+```d
+import mymodule;
+
+void main() {
+    mymodule.function();
+}
+```
+
+---
+
+## **Related Errors**
+- [Error Code 002: Circular Dependency](./error_code_002)
+- [Error Code 003: Access Violation](./error_code_003)

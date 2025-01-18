@@ -1,0 +1,58 @@
+---
+title: Error Code 013
+group: Codes
+description: Explanation for Immutable Violation
+priority: 13
+---
+
+## **Overview**
+This error occurs when there is an attempt to modify a variable or object declared as `immutable`. Immutable values cannot be altered once initialized.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Attempting to assign a new value to an `immutable` variable.
+  - Modifying properties of an object that is declared as `immutable`.
+  - Passing an `immutable` object to a function expecting a `mutable` parameter.
+
+- **Example**:
+```d
+void main() {
+    immutable int x = 10;
+    x = 20; // Error: cannot modify immutable variable `x`
+}
+```
+
+- **Solution**:
+  - Avoid assigning values to immutable variables after initialization:
+    ```d
+    void main() {
+        immutable int x = 10;
+        // x = 20; // Invalid
+    }
+    ```
+  - If modification is necessary, use `const` or `mutable` instead of `immutable`:
+    ```d
+    void main() {
+        int x = 10; // Mutable variable
+        x = 20; // Valid
+    }
+    ```
+  - When working with functions, ensure the correct parameter types:
+    ```d
+    void modifyValue(ref int x) {
+        x = 42;
+    }
+
+    void main() {
+        int y = 10;
+        modifyValue(y); // Valid
+    }
+    ```
+
+---
+
+## **Related Errors**
+- [Error Code 005: Immutable Assignment](./error_code_005)
+- [Error Code 006: Type Mismatch](./error_code_006)

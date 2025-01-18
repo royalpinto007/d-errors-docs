@@ -1,0 +1,125 @@
+---
+title: Interactive Playground
+group: Interactive
+description: Experiment with code snippets to learn and debug D programming concepts.
+priority: 1
+---
+
+The Interactive Playground allows you to experiment with D code snippets in a live environment. Test examples, modify code, and learn error handling concepts in real-time.
+
+---
+
+## Getting Started with the Playground
+
+The [Run.Dlang.io](https://run.dlang.io/) tool provides an online compiler for running D code. You can:
+- Experiment with examples provided in this documentation.
+- Test your custom code snippets for syntax and runtime errors.
+- Share code and results with your team.
+
+---
+
+## Try It Yourself: Example Snippets
+
+### Example 1: Fixing a Syntax Error
+```d
+void main() {
+    writeln("Hello, World!") // Missing semicolon
+}
+```
+
+1. Copy this code into the [D playground](https://run.dlang.io/).
+2. Observe the syntax error message.
+3. Fix the error by adding a semicolon:
+   ```d
+   void main() {
+       writeln("Hello, World!");
+   }
+   ```
+
+---
+
+### Example 2: Handling Runtime Errors
+```d
+void main() {
+    int x = 10 / 0; // Division by zero
+    writeln(x);
+}
+```
+
+1. Paste the code into the playground.
+2. Notice the runtime error.
+3. Modify the code to handle the error:
+   ```d
+   void main() {
+       try {
+           int x = 10 / 0;
+       } catch (Exception e) {
+           writeln("Caught an exception: ", e.msg);
+       }
+   }
+   ```
+
+---
+
+### Example 3: Working with Diagnostic Handlers
+```d
+import dmd.errors;
+
+void main() {
+    DiagnosticHandler customHandler = (ref const(Loc) loc, Color headerColor, const(char)* header, const(char)* messageFormat, __va_list_tag* args, const(char)* prefix1, const(char)* prefix2) nothrow {
+        writeln("Custom diagnostic: ", header);
+        return true;
+    };
+
+    diagnosticHandler = customHandler;
+    error("example.d", 1, 1, "Sample error message");
+}
+```
+
+1. Use this code to explore custom error handling.
+2. Observe how the diagnostic handler modifies error reporting.
+
+---
+
+## Exploring Advanced Features
+
+### Compile-Time Error Handling
+```d
+void main() {
+    static assert(1 + 1 == 3, "Math is broken!"); // Compile-time error
+}
+```
+
+### Array Bounds Checking
+```d
+void main() {
+    int[] arr = [1, 2, 3];
+    writeln(arr[5]); // Out-of-bounds access
+}
+```
+
+---
+
+## Sharing Code
+
+To share your code:
+1. Copy the URL from the playground after running your code.
+2. Share it with your team or include it in issue trackers for debugging discussions.
+
+---
+
+## Benefits of Using the Playground
+
+1. **Instant Feedback**: See compiler errors, warnings, and runtime outputs immediately.
+2. **Safe Environment**: Experiment without affecting your local setup.
+3. **Collaboration**: Share snippets with others to discuss and debug together.
+
+---
+
+## Key Takeaways
+
+- The Interactive Playground is a powerful tool for learning and debugging D code.
+- Use examples to explore syntax errors, runtime issues, and diagnostic handlers.
+- Share code snippets for collaboration and enhanced learning.
+
+Visit the [D Playground](https://run.dlang.io/) now to start experimenting with D programming concepts in real-time.

@@ -1,0 +1,183 @@
+---
+title: SARIF Support
+group: Advanced
+description: Learn how the DMD compiler uses SARIF for structured error reporting and diagnostics.
+priority: 2
+---
+
+SARIF (Static Analysis Results Interchange Format) is a standardized JSON format for reporting static analysis results. The DMD compiler supports SARIF output for structured, machine-readable error diagnostics via the `-verror-style=sarif` flag.
+
+---
+
+## Why Use SARIF?
+
+1. **Standardization**: A consistent format for reporting diagnostics.
+2. **Integration**: Seamless compatibility with IDEs and CI/CD pipelines.
+3. **Rich Metadata**: Includes detailed error information like locations and severity.
+4. **Automation**: Enables tools to analyze and visualize errors automatically.
+
+---
+
+## Generating SARIF Output
+
+To generate SARIF-formatted error reports, use the `-verror-style=sarif` compiler flag.
+
+### Example
+```bash
+dmd -verror-style=sarif example.d -o sarif-output.json
+```
+
+This command compiles `example.d` and outputs SARIF diagnostics in JSON format.
+
+---
+
+## Example SARIF Output
+
+### Example Code with Error
+```d
+void main() {
+    x = 5; // Undefined variable to trigger the error
+}
+```
+
+### Compilation Command
+```bash
+dmd -verror-style=sarif example.d
+```
+
+### SARIF Output
+```json
+{
+	"version": "2.1.0",
+	"$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0.json",
+	"runs": [{
+		"tool": {
+			"driver": {
+				"name": "Digital Mars D",
+				"version": "2.104.0",
+				"informationUri": "https://dlang.org/dmd.html"
+			}
+		},
+		"invocations": [{
+			"executionSuccessful": false
+		}],
+		"results": [
+			{
+				"ruleId": "DMD-error",
+				"message": {
+					"text": "undefined identifier `x`"
+				},
+				"level": "error",
+				"locations": [{
+					"physicalLocation": {
+						"artifactLocation": {
+							"uri": "example.d"
+						},
+						"region": {
+							"startLine": 2,
+							"startColumn": 5
+						}
+					}
+				}]
+			}
+		]
+	}]
+}
+```
+
+---
+
+## Understanding SARIF Fields
+
+### Key Elements:
+- **`version`**: SARIF schema version (2.1.0).
+- **`tool`**: Metadata about the tool generating the report (e.g., DMD compiler).
+- **`results`**: List of errors or diagnostics.
+  - **`ruleId`**: Identifier for the type of error (e.g., `DMD-error`).
+  - **`message.text`**: Error message.
+  - **`level`**: Severity of the error (`error`, `warning`, `note`).
+  - **`locations`**:
+    - **`artifactLocation`**: File where the error occurred.
+    - **`region`**: Line and column information.
+
+---
+
+## Using SARIF in IDEs and CI Tools
+
+### 1. **Visual Studio Code**
+Install the [SARIF Viewer extension](https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer) to visualize SARIF output directly in the editor.
+
+1. Generate SARIF output:
+   ```bash
+   dmd -verror-style=sarif example.d -o sarif-output.json
+   ```
+2. Open `sarif-output.json` in VS Code to view formatted diagnostics.
+
+---
+
+### 2. **GitHub Actions**
+Use SARIF in CI pipelines for automated diagnostics.
+
+**Example GitHub Action**:
+```yaml
+name: Analyze Code with DMD
+on:
+  push:
+    branches:
+      - main
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install DMD
+        run: sudo apt install dmd
+      - name: Generate SARIF Output
+        run: dmd -verror-style=sarif example.d -o sarif-output.json
+      - name: Upload SARIF Results
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: sarif-output.json
+```
+
+---
+
+## Customizing SARIF Output
+
+### Adding Metadata
+You can extend SARIF output with:
+- Custom **`ruleId`** for categorizing errors.
+- Enhanced **`locations`** for better source context.
+- **Recommendations** for resolving issues.
+
+---
+
+## Validating SARIF Files
+
+To ensure compliance with the SARIF 2.1.0 schema, use validation tools like:
+- [SARIF Validator](https://sarifweb.azurewebsites.net/)
+- `sarif-cli` (installable via npm or other package managers).
+
+### Example Validation Command
+```bash
+sarif-cli validate sarif-output.json
+```
+
+---
+
+## Debugging SARIF Issues
+
+1. **Check Compiler Output**: Ensure SARIF flag is used correctly.
+2. **Validate SARIF File**: Use a validator to catch format errors.
+3. **Review `ruleId`**: Assign meaningful IDs for better categorization.
+
+---
+
+## Key Takeaways
+
+- The `-verror-style=sarif` flag in DMD enables structured, machine-readable diagnostics.
+- SARIF output integrates seamlessly with modern tools like IDEs and CI pipelines.
+- Validate SARIF files to ensure compliance with the 2.1.0 schema.
+- Leverage SARIF for automated error analysis and enhanced debugging.
+
+Explore more advanced error handling techniques in the **Advanced** section.

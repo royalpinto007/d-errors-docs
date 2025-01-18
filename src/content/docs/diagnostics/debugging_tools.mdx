@@ -1,0 +1,184 @@
+---
+title: Debugging Tools
+group: Diagnostics
+description: Learn about tools and techniques for debugging errors in the D programming language.
+priority: 1
+---
+
+Debugging is a critical skill for identifying and resolving issues in your D programs. This page explores essential tools and techniques for diagnosing errors effectively.
+
+---
+
+## 1. **Using a Debugger**
+
+Debuggers allow you to inspect and control your program as it runs. Popular debuggers for D include:
+- **GDB (GNU Debugger)**: Widely used for debugging native applications.
+- **Visual Studio Code Debugger**: Offers a user-friendly interface with D language extensions.
+
+### Example: Debugging with GDB
+1. Compile your program with the `-g` flag to include debug information:
+   ```bash
+   dmd -g example.d
+   ```
+2. Start GDB:
+   ```bash
+   gdb ./example
+   ```
+3. Run the program in GDB and inspect errors:
+   ```gdb
+   run
+   ```
+
+### Example: Debugging with VS Code
+1. Install the **Code-D** extension for D language support.
+2. Create a `launch.json` file for your project:
+   ```json
+   {
+       "version": "0.2.0",
+       "configurations": [
+           {
+               "name": "Debug",
+               "type": "cppdbg",
+               "request": "launch",
+               "program": "${workspaceFolder}/example",
+               "args": [],
+               "stopAtEntry": false,
+               "cwd": "${workspaceFolder}",
+               "environment": [],
+               "externalConsole": true,
+               "MIMode": "gdb",
+               "setupCommands": [
+                   {
+                       "description": "Enable pretty-printing for gdb",
+                       "text": "-enable-pretty-printing",
+                       "ignoreFailures": true
+                   }
+               ]
+           }
+       ]
+   }
+   ```
+
+---
+
+## 2. **Logging and Tracing**
+
+### `writeln` Statements
+The simplest way to debug is by adding `writeln` statements to trace the flow of your program.
+
+**Example**:
+```d
+void main() {
+    writeln("Starting program...");
+    int x = 10 / 0; // Runtime error
+    writeln("This will not execute.");
+}
+```
+
+### Advanced Logging Libraries
+For more complex projects, consider using logging libraries like **std.experimental.logger**:
+```d
+import std.experimental.logger;
+
+void main() {
+    logInfo("Program started.");
+    int x = 10 / 0; // Error
+    logError("An error occurred.");
+}
+```
+
+---
+
+## 3. **Compiler Flags for Debugging**
+
+### `-g` Flag
+Include debug information in the compiled binary:
+```bash
+dmd -g example.d
+```
+
+### `-debug` Flag
+Enable debugging blocks in your code:
+```d
+void main() {
+    debug {
+        writeln("Debug mode active!");
+    }
+}
+```
+
+Compile with the `-debug` flag to activate:
+```bash
+dmd -debug example.d
+```
+
+### `-w` Flag
+Enable all warnings to catch potential issues early:
+```bash
+dmd -w example.d
+```
+
+### `-boundscheck` Flag
+Enable bounds checking for arrays to detect out-of-bounds errors:
+```bash
+dmd -boundscheck=on example.d
+```
+
+---
+
+## 4. **Static Analysis Tools**
+
+### `dscanner`
+A powerful static analysis tool for D code. Use it to identify:
+- Deprecated constructs
+- Potential runtime errors
+- Style issues
+
+**Installation**:
+```bash
+dub fetch dscanner
+```
+
+**Usage**:
+```bash
+dscanner example.d
+```
+
+---
+
+## 5. **Interactive Debugging with Run.Dlang.io**
+
+[Run.Dlang.io](https://run.dlang.io/) provides an online playground for running and debugging D code snippets. It's a great tool for:
+- Testing small examples.
+- Sharing code snippets with others.
+- Debugging simple logic errors.
+
+**Example**:
+```d
+void main() {
+    import std.stdio;
+    writeln("Hello, World!");
+}
+```
+
+Paste the code in the playground, run it, and see the results instantly.
+
+---
+
+## Debugging Best Practices
+
+1. **Isolate the Issue**: Narrow down the problem to a specific part of the code.
+2. **Reproduce the Error**: Ensure the issue is reproducible to understand its behavior.
+3. **Use Debugging Tools**: Leverage debuggers, logging, and static analysis tools.
+4. **Fix Incrementally**: Test after each change to ensure the fix works.
+
+---
+
+## Key Takeaways
+
+- Debugging tools like GDB, VS Code Debugger, and `dscanner` are essential for diagnosing issues in D programs.
+- Compiler flags like `-g`, `-debug`, and `-boundscheck` enhance debugging capabilities.
+- Use simple tools like `writeln` or advanced logging libraries for tracing.
+- The online playground [Run.Dlang.io](https://run.dlang.io/) is a great resource for quick debugging.
+
+Explore more diagnostic techniques in the **Diagnostics** section for advanced debugging strategies.

@@ -1,24 +1,22 @@
-# Compiled Object files
-*.o
-*.obj
+# build output
+dist/
+# generated types
+.astro/
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# dependencies
+node_modules/
 
-# Compiled Static libraries
-*.a
-*.lib
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Executables
-*.exe
 
-# DUB
-.dub
-docs.json
-__dummy.html
-docs/
+# environment variables
+.env
+.env.production
 
-# Code coverage
-*.lst
+# macOS-specific files
+.DS_Store
+.history

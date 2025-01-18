@@ -1,0 +1,48 @@
+---
+title: Error Code 007
+group: Codes
+description: Explanation for Unresolved Symbol
+priority: 7
+---
+
+## **Overview**
+This error occurs when the compiler cannot find a definition for a symbol (e.g., a function, variable, or class) referenced in the code. This often happens due to missing imports, incorrect names, or incomplete linking.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Forgetting to include the correct import statement.
+  - Misspelling a symbol name.
+  - Not linking the required library or module.
+
+- **Example**:
+```d
+void main() {
+    writeln("Hello, World!"); // Error: unresolved symbol `writeln`
+}
+```
+
+- **Solution**:
+  - Import the required module:
+    ```d
+    import std.stdio;
+
+    void main() {
+        writeln("Hello, World!"); // Valid
+    }
+    ```
+  - Verify the correct spelling of the symbol and its existence:
+    ```d
+    void main() {
+        int value = 42; // Define the symbol before use
+        writeln(value);
+    }
+    ```
+  - Ensure all necessary libraries are linked during compilation.
+
+---
+
+## **Related Errors**
+- [Error Code 001: Undefined Identifier](./error_code_001)
+- [Error Code 006: Type Mismatch](./error_code_006)

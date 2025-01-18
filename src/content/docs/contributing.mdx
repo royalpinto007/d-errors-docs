@@ -1,0 +1,142 @@
+---
+title: Contributing
+group: Overview
+description: Learn how to set up and contribute to the D Error Insights documentation site.
+priority: 1
+---
+
+## Contributing Guidelines
+
+Thank you for your interest in contributing to **D Error Insights**! Here's how you can get started.
+
+### Fork and Clone the Repository
+
+```bash
+# Fork the repository via GitHub and then clone your fork
+git clone https://github.com/your-username/d-errors-docs.git
+
+# Navigate to the project directory
+cd d-errors-docs
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+### Prerequisites
+
+Ensure you have the following installed on your system:
+- **Node.js**: Version 16 or higher
+- **npm**: Version 7 or higher
+- **Astro**: No need to install globally; it's included in the dependencies.
+
+### Project Structure
+
+```
+d-errors-docs/
+├── .astro/                    # Astro-specific build files (auto-generated)
+├── node_modules/              # Installed dependencies (auto-generated)
+├── public/                    # Static files (e.g., images, icons, etc.)
+├── src/                       # Source code for the documentation site
+│   ├── components/            # Reusable UI components
+│   ├── content/               # Documentation content
+│   │   ├── docs/              # All documentation files organized by sections
+│   │   │   ├── advanced/      # Advanced topics
+│   │   │   │   ├── custom_error_types.mdx
+│   │   │   │   ├── error_reporting_utilities.mdx
+│   │   │   │   ├── error_suppression.mdx
+│   │   │   │   └── sarif_support.mdx
+│   │   │   ├── case/          # Case studies and examples
+│   │   │   │   ├── common_errors_and_resolutions.mdx
+│   │   │   │   └── real_world_examples.mdx
+│   │   │   ├── codes/          # Error Codes
+│   │   │   │   ├── error_code_001.mdx
+│   │   │   │   └── error_code_002.mdx
+│   │   │   ├── diagnostics/   # Diagnostics and debugging tools
+│   │   │   │   ├── debugging_tools.mdx
+│   │   │   │   ├── diagnostic_handlers.mdx
+│   │   │   │   └── error_logging.mdx
+│   │   │   ├── errors/        # Error categories
+│   │   │   │   ├── compilation_errors.mdx
+│   │   │   │   ├── deprecation_warnings.mdx
+│   │   │   │   ├── runtime_errors.mdx
+│   │   │   │   └── syntax_errors.mdx
+│   │   │   ├── general/       # General information
+│   │   │   │   ├── categories.mdx
+│   │   │   │   ├── overview.mdx
+│   │   │   │   └── resources.mdx
+│   │   │   ├── Interactive/   # Interactive playground
+│   │   │   │   └── interactive_playground.mdx
+│   │   │   ├── internals/     # Compiler internals and prioritization
+│   │   │   │   ├── compiler_internals.mdx
+│   │   │   │   └── error_categorization_and_prioritization.mdx
+│   │   │   ├── contributing.mdx  # Contributor guide
+│   │   │   ├── faqs.mdx           # Frequently Asked Questions
+│   │   │   ├── glossary.mdx       # Glossary of terms
+│   │   │   ├── index.mdx          # Homepage content
+│   │   │   └── writing_style_guide.mdx  # Documentation writing guidelines
+│   ├── layouts/               # Page layouts for MDX files
+│   ├── pages/                 # Top-level site pages (e.g., 404)
+│   ├── stores/                # State management files (if any)
+│   └── styles/                # Global CSS or Tailwind styles
+├── .gitignore                 # Files and directories to ignore in Git
+├── astro.config.mjs           # Astro configuration file
+├── LICENSE                    # Project license (e.g., MIT, Boost, etc.)
+├── package-lock.json          # Lock file for npm dependencies
+├── package.json               # Project metadata and dependencies
+├── postcss.config.mjs         # PostCSS configuration
+├── README.md                  # Project readme with setup and usage instructions
+├── tailwind.config.mjs        # Tailwind CSS configuration
+└── tsconfig.json              # TypeScript configuration (if applicable)
+```
+
+### Contribution Workflow
+
+1. **Fork the Repository**:
+   - Click the "Fork" button on GitHub.
+
+2. **Create a Branch**:
+   - Create a branch for your changes:
+     ```bash
+     git checkout -b feature/your-feature-name
+     ```
+
+3. **Make Changes**:
+   - Add or edit content in the `src/content/errors/` directory.
+   - Update other parts of the project as needed.
+
+4. **Run Tests**:
+   - If tests are included, run them to ensure no errors:
+     ```bash
+     npm test
+     ```
+
+5. **Commit Your Changes**:
+   - Use clear and descriptive commit messages:
+     ```bash
+     git commit -m "Add detailed explanation for C-style pointers error"
+     ```
+
+6. **Push Your Changes**:
+   - Push your branch to your fork:
+     ```bash
+     git push origin feature/your-feature-name
+     ```
+
+7. **Submit a Pull Request**:
+   - Open a pull request from your branch to the main branch of the original repository.
+
+### Development Commands
+
+```bash
+# Start the development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview the production build
+npm run preview
+```

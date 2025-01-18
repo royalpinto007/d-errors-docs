@@ -1,0 +1,207 @@
+---
+title: Error Logging
+group: Diagnostics
+description: Learn the best practices for logging errors in the D programming language.
+priority: 3
+---
+
+Error logging is essential for diagnosing, debugging, and maintaining software. In the D programming language, efficient logging helps developers track down issues and ensure smoother error recovery.
+
+---
+
+## Why is Error Logging Important?
+
+1. **Traceability**: Logs provide a history of errors and events for debugging.
+2. **Proactive Monitoring**: Identify recurring issues before they escalate.
+3. **Team Collaboration**: Share logs for better team coordination.
+4. **Compliance**: Meet regulatory or operational requirements with proper logging.
+
+---
+
+## Logging Methods in D
+
+### 1. **Using `std.experimental.logger`**
+The `std.experimental.logger` module is a built-in library for structured logging in D.
+
+#### Basic Usage:
+```d
+import std.experimental.logger;
+
+void main() {
+    logInfo("Application started");
+    logError("An error occurred");
+}
+```
+
+#### Log Levels:
+- **`logTrace`**: Fine-grained informational events.
+- **`logDebug`**: Debugging information.
+- **`logInfo`**: General application events.
+- **`logWarn`**: Potentially harmful situations.
+- **`logError`**: Error events that might still allow the application to run.
+- **`logFatal`**: Severe errors causing premature termination.
+
+---
+
+### 2. **Using `writeln` for Simple Logs**
+For small-scale projects, `writeln` is a quick way to log errors:
+```d
+import std.stdio;
+
+void main() {
+    writeln("[ERROR] File not found: config.json");
+}
+```
+
+---
+
+### 3. **Custom Logging Solutions**
+You can create custom logging mechanisms for more control:
+```d
+import std.file;
+import std.datetime;
+
+void logMessage(string level, string message) {
+    auto timestamp = Clock.currTime.toISOExtString();
+    string logEntry = format("[%s] %s: %s\n", timestamp, level, message);
+    append("app.log", logEntry);
+}
+
+void main() {
+    logMessage("ERROR", "Failed to connect to database");
+}
+```
+
+---
+
+## Where to Log Errors
+
+### 1. **Console**
+Best for development and debugging environments. Logs are immediately visible:
+```d
+logError("This is a console log.");
+```
+
+### 2. **Log Files**
+Ideal for production environments where persistent logs are required:
+```d
+logMessage("INFO", "Server started at port 8080.");
+```
+
+### 3. **External Systems**
+Integrate logs with monitoring systems like Prometheus, Splunk, or ELK Stack for advanced analytics:
+```d
+logInfo("Error data sent to monitoring service.");
+```
+
+---
+
+## Best Practices for Logging
+
+### 1. **Log Only What’s Necessary**
+Avoid logging sensitive information like passwords or API keys.
+
+### 2. **Use Structured Logs**
+Structured logs are easier to parse and analyze:
+```json
+{
+    "timestamp": "2025-01-14T12:34:56Z",
+    "level": "ERROR",
+    "message": "Connection timed out",
+    "context": {
+        "host": "example.com",
+        "port": 443
+    }
+}
+```
+
+### 3. **Include Context**
+Add details like file names, line numbers, and function names:
+```d
+logError("File upload failed", "file: upload.d, line: 42");
+```
+
+### 4. **Rotate Log Files**
+Prevent log files from growing indefinitely by rotating them:
+- Use tools like **logrotate** on Linux.
+- Write custom file rotation logic in D:
+  ```d
+  import std.file;
+
+  void rotateLogs(string fileName) {
+      if (fileSize(fileName) > 10_000) { // Rotate if file size exceeds 10KB
+          rename(fileName, fileName ~ ".old");
+      }
+  }
+  ```
+
+---
+
+## Debugging with Logs
+
+1. **Correlate Logs**: Use timestamps to identify related events.
+2. **Search and Filter**: Use tools like `grep` to extract relevant logs:
+   ```bash
+   grep "ERROR" app.log
+   ```
+3. **Visualize Logs**: Use dashboards or visualization tools for better insights.
+
+---
+
+## Example: Advanced Logging with Context
+
+Here’s a complete example of logging with context and error levels:
+```d
+import std.experimental.logger;
+import std.format;
+
+void main() {
+    logInfo("Application started");
+
+    try {
+        int x = 10 / 0; // Runtime error
+    } catch (Exception e) {
+        logError(format("Exception caught: %s", e.msg));
+    }
+
+    logWarn("Memory usage is high");
+    logFatal("Application shutting down unexpectedly");
+}
+```
+
+---
+
+## Example: Writing Logs to a File
+
+Write all logs to a file for persistent storage:
+```d
+import std.file;
+
+void logToFile(string level, string message) {
+    string logEntry = format("[%s] %s\n", level, message);
+    append("application.log", logEntry);
+}
+
+void main() {
+    logToFile("INFO", "Server started.");
+    logToFile("ERROR", "Failed to connect to database.");
+}
+```
+
+**Output in `application.log`:**
+```
+[INFO] Server started.
+[ERROR] Failed to connect to database.
+```
+
+---
+
+## Key Takeaways
+
+- Effective logging improves debugging, monitoring, and collaboration.
+- Use `std.experimental.logger` for structured logging in D.
+- Log messages with meaningful levels and context.
+- Store logs in appropriate locations (console, files, or external systems) based on the environment.
+- Follow best practices to ensure logs are helpful and secure.
+
+Explore more diagnostics tools and techniques in the **Diagnostics** section to further enhance your debugging workflow.

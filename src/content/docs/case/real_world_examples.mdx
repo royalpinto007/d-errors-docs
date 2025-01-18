@@ -1,0 +1,220 @@
+---
+title: Real-World Examples
+group: Case
+description: Explore how error-handling strategies are applied in large-scale D projects.
+priority: 2
+---
+
+In this section, we showcase real-world examples of error handling in D projects. These examples demonstrate how error-handling utilities like `error()`, `warning()`, and SARIF support are used in practical scenarios.
+
+---
+
+## Example 1: Error Reporting in a CLI Tool
+
+### Context:
+A CLI tool for file processing needs to validate user input and handle errors gracefully.
+
+### Code:
+```d
+import std.stdio;
+import std.file;
+
+void main(string[] args) {
+    if (args.length < 2) {
+        error("Usage: filetool <filename>");
+        return;
+    }
+
+    string filename = args[1];
+    if (!exists(filename)) {
+        error("File not found: %s", filename);
+        return;
+    }
+
+    writeln("Processing file: ", filename);
+}
+```
+
+### Key Points:
+- **Error Reporting**: Uses `error()` to display clear, actionable error messages.
+- **Validation**: Checks for missing arguments and file existence.
+
+---
+
+## Example 2: SARIF Integration in CI/CD Pipeline
+
+### Context:
+A CI/CD pipeline uses SARIF output from the DMD compiler to track and analyze errors across multiple builds.
+
+### Workflow:
+1. Compile the project with the `-verror-style=sarif` flag.
+2. Redirect the SARIF output to a JSON file.
+3. Use a SARIF viewer (e.g., in Visual Studio Code or GitHub Actions) to visualize errors.
+
+### Command:
+```bash
+dmd -verror-style=sarif -o- source.d > errors.sarif
+```
+
+### Example SARIF Output:
+```json
+{
+    "version": "2.1.0",
+    "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0.json",
+    "runs": [
+        {
+            "tool": {
+                "driver": {
+                    "name": "Digital Mars D",
+                    "version": "2.101.0",
+                    "informationUri": "https://dlang.org/dmd.html"
+                }
+            },
+            "results": [
+                {
+                    "ruleId": "DMD-error",
+                    "message": {
+                        "text": "Undefined identifier `x`"
+                    },
+                    "locations": [
+                        {
+                            "physicalLocation": {
+                                "artifactLocation": {
+                                    "uri": "source.d"
+                                },
+                                "region": {
+                                    "startLine": 12,
+                                    "startColumn": 5
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+
+### Key Points:
+- **Standardization**: SARIF provides a consistent format for error reporting.
+- **Automation**: Enables integration with tools to automatically analyze and triage errors.
+
+---
+
+## Example 3: Custom Diagnostic Handler
+
+### Context:
+A developer wants to redirect all compiler warnings and errors to a log file.
+
+### Code:
+```d
+import std.stdio;
+import dmd.errors;
+
+DiagnosticHandler customHandler = (ref const(Loc) loc, Color headerColor, const(char)* header, const(char)* messageFormat, __va_list_tag* args, const(char)* prefix1, const(char)* prefix2) nothrow {
+    auto logFile = File("error_log.txt", "a");
+    logFile.writefln("[%s:%d:%d] %s", loc.filename, loc.line, loc.column, header);
+    logFile.close();
+    return true; // Suppress default error output
+};
+
+void main() {
+    diagnosticHandler = customHandler;
+
+    error("example.d", 5, 10, "Undefined variable `x`");
+}
+```
+
+### Key Points:
+- **Customization**: Redirects error messages to a log file.
+- **Flexibility**: Allows developers to suppress or modify default behavior.
+
+---
+
+## Example 4: Handling Deprecated Features in Libraries
+
+### Context:
+A library author wants to deprecate a function but provide a clear migration path for users.
+
+### Code:
+```d
+void oldFunction() deprecated("Use `newFunction` instead.") {
+    writeln("This is the old function.");
+}
+
+void newFunction() {
+    writeln("This is the new function.");
+}
+
+void main() {
+    oldFunction(); // Generates a deprecation warning
+    newFunction();
+}
+```
+
+### Key Points:
+- **Deprecation Warning**: Informs users about deprecated features.
+- **Migration Guidance**: Provides clear instructions for moving to the new API.
+
+---
+
+## Example 5: Error Handling in a Web Server
+
+### Context:
+A D-based web server needs to handle runtime errors and ensure graceful recovery.
+
+### Code:
+```d
+import std.stdio;
+import vibe.d;
+
+void handleRequest(HTTPServerRequest req, HTTPServerResponse res) {
+    try {
+        // Simulate error
+        if (req.path == "/error") {
+            throw new Exception("Simulated error");
+        }
+
+        res.writeBody("Hello, World!");
+    } catch (Exception e) {
+        res.statusCode = 500;
+        res.writeBody("Internal Server Error: " ~ e.msg);
+        error("Error handling request: %s", e.msg);
+    }
+}
+
+void main() {
+    auto settings = new HTTPServerSettings;
+    settings.port = 8080;
+
+    listenHTTP(settings, &handleRequest);
+}
+```
+
+### Key Points:
+- **Runtime Error Handling**: Uses `try/catch` to handle unexpected issues.
+- **Graceful Recovery**: Ensures the server remains operational despite errors.
+
+---
+
+## Lessons from Real-World Examples
+
+1. **Use Clear Messages**:
+   - Always provide actionable and user-friendly error messages.
+2. **Leverage SARIF**:
+   - Integrate SARIF for structured and automated error analysis.
+3. **Customize When Needed**:
+   - Use `DiagnosticHandler` for tailored error processing.
+4. **Plan for Deprecations**:
+   - Inform users about deprecated features and offer migration paths.
+5. **Ensure Graceful Recovery**:
+   - Always handle runtime errors to maintain system stability.
+
+---
+
+## Key Takeaways
+
+- Real-world applications of D's error-handling utilities include CLI tools, web servers, and CI pipelines.
+- SARIF integration and custom diagnostic handlers provide flexibility for advanced use cases.
+- Following best practices ensures error handling is robust, user-friendly, and maintainable.

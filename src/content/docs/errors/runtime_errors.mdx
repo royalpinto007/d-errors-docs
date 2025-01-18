@@ -1,0 +1,155 @@
+---
+title: Runtime Errors
+group: Errors
+description: Learn about runtime errors in the D programming language, their causes, and how to resolve them.
+priority: 2
+---
+
+Runtime errors occur while a program is executing. These errors are not detected during compilation but can cause the program to crash or behave unexpectedly.
+
+---
+
+## What Causes Runtime Errors?
+
+Runtime errors occur due to:
+1. **Invalid Operations**: Examples include division by zero or accessing null pointers.
+2. **Out-of-Bounds Access**: Accessing an element beyond the bounds of an array.
+3. **Resource Limitations**: Running out of memory or trying to open too many files simultaneously.
+4. **Logic Errors**: Flaws in the code logic that produce unintended behavior.
+
+---
+
+## Examples of Runtime Errors
+
+### 1. **Division by Zero**
+Division by zero is undefined and raises a runtime error.
+```d
+void main() {
+    int x = 10;
+    int y = 0;
+    int result = x / y; // Error: Division by zero
+}
+```
+
+### 2. **Null Pointer Access**
+Accessing or dereferencing a null pointer leads to a crash.
+```d
+void main() {
+    int* ptr = null;
+    writeln(*ptr); // Error: Null pointer access
+}
+```
+
+### 3. **Out-of-Bounds Array Access**
+Trying to access an array index outside its bounds triggers an error.
+```d
+void main() {
+    int[] arr = [1, 2, 3];
+    writeln(arr[5]); // Error: Array index out of bounds
+}
+```
+
+---
+
+## How to Handle Runtime Errors
+
+### 1. **Using `try/catch` Blocks**
+Wrap error-prone code in `try/catch` blocks to handle exceptions gracefully.
+```d
+void main() {
+    try {
+        int x = 10 / 0; // Error: Division by zero
+    } catch (Exception e) {
+        writeln("Caught an error: ", e.msg);
+    }
+}
+```
+
+### 2. **Check for Null Values**
+Always verify pointers before dereferencing them.
+```d
+void main() {
+    int* ptr = null;
+    if (ptr !is null) {
+        writeln(*ptr);
+    } else {
+        writeln("Pointer is null");
+    }
+}
+```
+
+### 3. **Validate Array Indices**
+Ensure indices are within valid bounds before accessing arrays.
+```d
+void main() {
+    int[] arr = [1, 2, 3];
+    int index = 5;
+    if (index < arr.length) {
+        writeln(arr[index]);
+    } else {
+        writeln("Index out of bounds");
+    }
+}
+```
+
+---
+
+## Debugging Runtime Errors
+
+### 1. **Use a Debugger**
+Tools like **GDB** or **Visual Studio Code Debugger** can help identify runtime errors by stepping through the code.
+
+### 2. **Add Logging**
+Insert `writeln` statements or use a logging library to trace the flow of execution and identify issues.
+
+### 3. **Enable Runtime Checks**
+Compile with runtime checks enabled for better diagnostics:
+```bash
+dmd -check
+```
+
+---
+
+## Example: Fixing a Runtime Error
+
+### Incorrect Code
+```d
+void main() {
+    int[] arr = [1, 2, 3];
+    writeln(arr[5]); // Error: Array index out of bounds
+}
+```
+
+### Error Message
+```
+core.exception.RangeError@runtime(1): Range violation
+```
+
+### Corrected Code
+```d
+void main() {
+    int[] arr = [1, 2, 3];
+    int index = 2;
+    if (index < arr.length) {
+        writeln(arr[index]); // Prints 3
+    } else {
+        writeln("Index out of bounds");
+    }
+}
+```
+
+---
+
+## Avoiding Runtime Errors
+
+- **Input Validation**: Validate user input and parameters.
+- **Use Safe Defaults**: Initialize pointers and variables to safe values.
+- **Leverage Compiler Options**: Use flags like `-boundscheck` for additional safety during development.
+
+---
+
+## Key Takeaways
+
+- Runtime errors occur during program execution and are often harder to debug than syntax or compilation errors.
+- Using proper error handling techniques like `try/catch`, null checks, and array bounds validation can mitigate runtime issues.
+- Tools like debuggers and runtime checks are invaluable for diagnosing and fixing these errors.

@@ -1,0 +1,51 @@
+---
+title: Error Code 009
+group: Codes
+description: Explanation for Array Index Out of Bounds
+priority: 9
+---
+
+## **Overview**
+This error occurs when attempting to access an element of an array using an index that is either negative or exceeds the array's bounds.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Using a hardcoded index outside the array's range.
+  - Looping beyond the array's length.
+  - Failing to check array bounds before accessing elements.
+
+- **Example**:
+```d
+void main() {
+    int[] arr = [1, 2, 3];
+    writeln(arr[3]); // Error: array index out of bounds
+}
+```
+
+- **Solution**:
+  - Use bounds checking before accessing elements:
+    ```d
+    void main() {
+        int[] arr = [1, 2, 3];
+        if (arr.length > 2) {
+            writeln(arr[2]); // Safe
+        }
+    }
+    ```
+  - Iterate within the bounds of the array:
+    ```d
+    void main() {
+        int[] arr = [1, 2, 3];
+        foreach (i, value; arr) {
+            writeln("Index ", i, ": ", value); // Safe iteration
+        }
+    }
+    ```
+
+---
+
+## **Related Errors**
+- [Error Code 003: Access Violation](./error_code_003)
+- [Error Code 008: Division by Zero](./error_code_008)

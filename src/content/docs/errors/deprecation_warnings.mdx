@@ -1,0 +1,145 @@
+---
+title: Deprecation Warnings
+group: Errors
+description: Learn about deprecation warnings in the D programming language, why they occur, and how to address them.
+priority: 4
+---
+
+Deprecation warnings occur when your code uses features or constructs that are outdated and may be removed in future versions of the D programming language. These warnings are intended to encourage developers to update their code to use modern, supported alternatives.
+
+---
+
+## What Causes Deprecation Warnings?
+
+Deprecation warnings can result from:
+1. **Using Deprecated Functions**: Functions marked as deprecated will trigger warnings.
+2. **Using Outdated Syntax**: Certain syntax constructs may be replaced with newer alternatives.
+3. **Library Changes**: Updates to standard libraries may phase out older APIs.
+
+---
+
+## Examples of Deprecation Warnings
+
+### 1. **Deprecated Functions**
+```d
+void main() {
+    printf("Hello, World!"); // Warning: printf is deprecated, use writeln instead
+}
+```
+
+### 2. **Outdated Syntax**
+```d
+void main() {
+    auto x = 5; // Warning: 'auto' type inference has been updated, specify types explicitly for clarity
+}
+```
+
+### 3. **Deprecated Library APIs**
+```d
+void main() {
+    import std.json;
+    JSONValue value; // Warning: std.json is deprecated, use std.data.json instead
+}
+```
+
+---
+
+## How to Resolve Deprecation Warnings
+
+### 1. **Replace Deprecated Functions**
+Identify the suggested replacement in the warning message and update your code.
+
+**Example**:
+```d
+// Deprecated
+printf("Hello, World!");
+
+// Modern Alternative
+writeln("Hello, World!");
+```
+
+### 2. **Use Supported Libraries**
+Migrate to newer library APIs that replace deprecated ones.
+
+**Example**:
+```d
+// Deprecated
+import std.json;
+
+// Modern Alternative
+import std.data.json;
+```
+
+### 3. **Enable Deprecation Errors**
+Turn warnings into errors to enforce immediate fixes:
+```bash
+dmd -de example.d
+```
+
+---
+
+## Ignoring Deprecation Warnings
+
+If necessary, you can suppress warnings using the `-wi` flag:
+```bash
+dmd -wi example.d
+```
+
+> **Note**: Ignoring deprecation warnings is not recommended for long-term projects, as future versions of the D compiler may remove deprecated features entirely.
+
+---
+
+## Debugging Deprecation Warnings
+
+### 1. **Read the Compiler Message**
+The DMD compiler provides detailed information about the deprecated feature and its replacement.
+
+**Example Message**:
+```
+example.d(3): Deprecation: printf is deprecated, use writeln instead
+```
+
+### 2. **Refer to the Documentation**
+Check the official documentation for detailed information about the deprecated feature and its alternatives.
+
+### 3. **Run Static Analysis**
+Tools like `dscanner` can help identify deprecated features across your codebase.
+
+---
+
+## Example: Fixing a Deprecation Warning
+
+### Code with Warning
+```d
+void main() {
+    printf("Hello, World!"); // Warning: printf is deprecated
+}
+```
+
+### Error Message
+```
+example.d(2): Deprecation: printf is deprecated, use writeln instead
+```
+
+### Fixed Code
+```d
+void main() {
+    writeln("Hello, World!");
+}
+```
+
+---
+
+## Avoiding Deprecation Warnings
+
+1. **Stay Updated**: Regularly review release notes and upgrade guides for the D language.
+2. **Use Modern Constructs**: Adopt the recommended replacements for deprecated features.
+3. **Enable Deprecation Warnings**: Compile with the `-w` flag to catch warnings early.
+
+---
+
+## Key Takeaways
+
+- Deprecation warnings help developers transition to modern features and avoid future compatibility issues.
+- Fix warnings promptly to ensure your code remains up-to-date and supported.
+- Use the compiler’s suggestions and documentation to replace deprecated constructs with their alternatives.

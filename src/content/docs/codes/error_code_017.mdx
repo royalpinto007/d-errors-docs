@@ -1,0 +1,64 @@
+---
+title: Error Code 017
+group: Codes
+description: Explanation for Stack Overflow
+priority: 17
+---
+
+## **Overview**
+This error occurs when the call stack is exhausted, typically due to excessive recursion or an infinite loop involving function calls. A stack overflow usually leads to program crashes or runtime errors.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Infinite recursion without a proper base case.
+  - Allocating excessively large local variables or arrays.
+  - Deeply nested function calls that exceed stack limits.
+
+- **Example**:
+```d
+void infiniteRecursion() {
+    infiniteRecursion(); // Error: stack overflow
+}
+
+void main() {
+    infiniteRecursion();
+}
+```
+
+- **Solution**:
+  - Ensure recursive functions have a valid base case to terminate recursion:
+    ```d
+    int factorial(int n) {
+        if (n <= 1) {
+            return 1; // Base case
+        }
+        return n * factorial(n - 1);
+    }
+
+    void main() {
+        writeln(factorial(5)); // Safe recursion
+    }
+    ```
+  - Avoid deep recursion by using iterative methods when possible:
+    ```d
+    int factorialIterative(int n) {
+        int result = 1;
+        for (int i = 1; i <= n; i++) {
+            result *= i;
+        }
+        return result;
+    }
+
+    void main() {
+        writeln(factorialIterative(5)); // Safe iteration
+    }
+    ```
+  - Limit the size of local variables to prevent excessive stack usage.
+
+---
+
+## **Related Errors**
+- [Error Code 009: Array Index Out of Bounds](./error_code_009)
+- [Error Code 016: Unreachable Code Detected](./error_code_016)

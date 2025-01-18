@@ -1,0 +1,52 @@
+---
+title: Error Code 015
+group: Codes
+description: Explanation for Invalid Cast
+priority: 15
+---
+
+## **Overview**
+This error occurs when attempting to perform a type cast that is either unsupported or unsafe. It can happen when trying to cast incompatible types or when the cast results in undefined behavior.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Casting between unrelated or incompatible types.
+  - Casting a base class to a derived class without proper inheritance.
+  - Unsafe pointer casts that lead to runtime errors.
+
+- **Example**:
+```d
+void main() {
+    void* ptr = null;
+    int* intPtr = cast(int*) ptr; // Error: invalid cast
+}
+```
+
+- **Solution**:
+  - Ensure the cast is valid by verifying type compatibility:
+    ```d
+    void main() {
+        void* ptr = cast(void*) malloc(int.sizeof);
+        int* intPtr = cast(int*) ptr; // Valid cast
+        free(ptr);
+    }
+    ```
+  - Use dynamic casts for safe runtime type checking:
+    ```d
+    class Base {}
+    class Derived : Base {}
+
+    void main() {
+        Base obj = new Base();
+        auto derivedObj = cast(Derived) obj; // Returns null if invalid
+    }
+    ```
+  - Avoid unnecessary or unsafe casts by designing code with proper type constraints.
+
+---
+
+## **Related Errors**
+- [Error Code 006: Type Mismatch](./error_code_006)
+- [Error Code 008: Division by Zero](./error_code_008)

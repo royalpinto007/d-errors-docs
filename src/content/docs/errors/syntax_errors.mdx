@@ -1,0 +1,129 @@
+---
+title: Syntax Errors
+group: Errors
+description: Learn about syntax errors in the D programming language, their causes, and how to resolve them.
+priority: 1
+---
+
+Syntax errors occur when code violates the grammar rules of the D programming language. These errors are identified during the compilation phase, and the compiler provides feedback on what went wrong.
+
+---
+
+## What Causes Syntax Errors?
+
+Syntax errors arise from:
+- Missing or incorrect punctuation (e.g., semicolons, braces, parentheses).
+- Incorrect use of keywords or operators.
+- Declaring variables or functions improperly.
+
+---
+
+## Examples of Syntax Errors
+
+### 1. **Missing Semicolons**
+D requires a semicolon at the end of statements.  
+**Example**:
+```d
+// Incorrect
+int x = 10
+writeln(x);
+
+// Correct
+int x = 10;
+writeln(x);
+```
+
+### 2. **Mismatched Braces or Parentheses**
+Braces and parentheses must always match.  
+**Example**:
+```d
+// Incorrect
+void main() {
+    if (true {
+        writeln("Hello, World!");
+    }
+}
+
+// Correct
+void main() {
+    if (true) {
+        writeln("Hello, World!");
+    }
+}
+```
+
+### 3. **Using Undefined Variables**
+All variables must be declared before use.  
+**Example**:
+```d
+// Incorrect
+void main() {
+    writeln(x); // Error: Undefined variable
+}
+
+// Correct
+void main() {
+    int x = 10;
+    writeln(x);
+}
+```
+
+---
+
+## How to Resolve Syntax Errors
+
+### 1. **Read Compiler Messages**
+The DMD compiler provides clear error messages and line numbers for syntax errors. Carefully read the output to locate and fix issues.
+
+**Example Error Message**:
+```
+example.d(3): Error: semicolon expected after declaration
+```
+
+### 2. **Use an IDE or Linter**
+Modern editors like **Visual Studio Code** with D extensions can highlight syntax issues in real-time.
+
+### 3. **Check Code Structure**
+Ensure that:
+- Every opening brace `{` has a closing brace `}`.
+- Statements are terminated with semicolons.
+- Variables and functions are declared correctly.
+
+---
+
+## Avoiding Syntax Errors
+
+- **Adopt Consistent Formatting**: Use tools like `dfmt` to automatically format your code.
+- **Learn the Basics**: Familiarize yourself with D’s syntax through official documentation and tutorials.
+- **Run Small Tests**: Test snippets of code to ensure correctness before integrating them into larger projects.
+
+---
+
+## Example: Fixing a Syntax Error
+
+### Incorrect Code
+```d
+void main() {
+    writeln("Hello, World!")
+}
+```
+
+### Error Message
+```
+example.d(2): Error: semicolon expected after statement
+```
+
+### Corrected Code
+```d
+void main() {
+    writeln("Hello, World!");
+}
+```
+
+---
+
+## Key Takeaways
+
+- Syntax errors prevent your code from compiling.
+- The compiler provides clear feedback to help you fix errors.
+- Tools like IDEs, linters, and formatters can catch issues early.

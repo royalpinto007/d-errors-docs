@@ -1,0 +1,175 @@
+---
+title: Diagnostic Handlers
+group: Diagnostics
+description: Learn how to use diagnostic handlers in the D programming language to customize error reporting.
+priority: 2
+---
+
+Diagnostic handlers in the D programming language allow developers to customize how errors, warnings, and messages are reported during compilation or runtime. They provide a mechanism to intercept diagnostic messages and process them as needed.
+
+---
+
+## What Are Diagnostic Handlers?
+
+A diagnostic handler is a delegate that processes diagnostic messages. If set, the diagnostic handler intercepts errors, warnings, and other messages before they are printed to `stderr`.
+
+### Key Benefits:
+- **Custom Error Reporting**: Format and log messages in your preferred style.
+- **Centralized Handling**: Process all diagnostic messages in one place.
+- **Integration**: Useful for tools like IDEs, log analyzers, or CI pipelines.
+
+---
+
+## Setting Up a Diagnostic Handler
+
+To set up a diagnostic handler:
+1. Define a delegate of type `DiagnosticHandler`.
+2. Assign the handler to the global `diagnosticHandler` variable.
+
+**Example**:
+```d
+import dmd.errors;
+import std.stdio;
+
+void main() {
+    // Define a custom diagnostic handler
+    DiagnosticHandler customHandler = (ref const(Loc) loc, Color headerColor, const(char)* header, const(char)* messageFormat, __va_list_tag* args, const(char)* prefix1, const(char)* prefix2) nothrow {
+        writeln("Custom diagnostic: ", header, " - ", format(messageFormat, args));
+        return true; // Skip default printing
+    };
+
+    // Set the diagnostic handler
+    diagnosticHandler = customHandler;
+
+    // Trigger a sample error
+    error("example.d", 10, 15, "Sample error occurred.");
+}
+```
+
+---
+
+## Arguments for Diagnostic Handlers
+
+The `DiagnosticHandler` delegate receives the following arguments:
+- **`Loc loc`**: Location of the diagnostic (file, line, column).
+- **`Color headerColor`**: Suggested color for the message header.
+- **`const(char)* header`**: Type of diagnostic (e.g., `Error`, `Warning`).
+- **`const(char)* messageFormat`**: Format string for the diagnostic message.
+- **`va_list args`**: Arguments for the format string.
+- **`const(char)* prefix1`**: Optional prefix for the message.
+- **`const(char)* prefix2`**: Another optional prefix for the message.
+
+---
+
+## Example: Formatting Custom Messages
+
+Customize how diagnostic messages are logged:
+```d
+import dmd.errors;
+import std.format;
+import std.file;
+
+void main() {
+    // Log diagnostics to a file
+    DiagnosticHandler fileLogger = (ref const(Loc) loc, Color headerColor, const(char)* header, const(char)* messageFormat, __va_list_tag* args, const(char)* prefix1, const(char)* prefix2) nothrow {
+        string logMessage = format("[%s:%d:%d] %s: ", loc.filename, loc.line, loc.column, header);
+        logMessage ~= format(messageFormat, args);
+        append("diagnostics.log", logMessage ~ "\n");
+        return true; // Skip default printing
+    };
+
+    // Set the diagnostic handler
+    diagnosticHandler = fileLogger;
+
+    // Trigger a warning
+    warning("example.d", 20, 5, "Deprecated feature used.");
+}
+```
+
+This logs the warning to `diagnostics.log`:
+```
+[example.d:20:5] Warning: Deprecated feature used.
+```
+
+---
+
+## Restoring Default Behavior
+
+To restore the default behavior of printing diagnostics to `stderr`, set `diagnosticHandler` to `null`:
+```d
+diagnosticHandler = null; // Restore default diagnostic reporting
+```
+
+---
+
+## Use Cases for Diagnostic Handlers
+
+### 1. **Integrating with IDEs**
+Diagnostic handlers can send messages in formats like JSON for integration with IDE features such as error squiggles or inline warnings.
+
+### 2. **Custom Logging**
+Log errors to files, databases, or external monitoring systems for better debugging and analytics.
+
+### 3. **Enhanced Error Reporting**
+Add additional context to diagnostics for team collaboration or automated pipelines.
+
+---
+
+## Debugging Diagnostic Handlers
+
+### 1. **Use Safe Logging**
+Ensure that the diagnostic handler itself is safe and doesn't introduce additional errors. Avoid accessing invalid memory or causing infinite loops.
+
+### 2. **Test with Sample Errors**
+Test the handler using various diagnostic types (`error`, `warning`, `deprecation`) to ensure consistent behavior.
+
+---
+
+## Example: JSON Formatting for CI Integration
+
+Generate structured JSON output for automated pipelines:
+```d
+import dmd.errors;
+import std.json;
+import std.file;
+
+void main() {
+    DiagnosticHandler jsonHandler = (ref const(Loc) loc, Color headerColor, const(char)* header, const(char)* messageFormat, __va_list_tag* args, const(char)* prefix1, const(char)* prefix2) nothrow {
+        auto jsonObject = JSONValue([
+            "file": loc.filename,
+            "line": loc.line,
+            "column": loc.column,
+            "type": header,
+            "message": format(messageFormat, args)
+        ]);
+
+        append("diagnostics.json", jsonObject.toPrettyString ~ ",\n");
+        return true;
+    };
+
+    diagnosticHandler = jsonHandler;
+
+    error("example.d", 10, 15, "An error for CI integration.");
+}
+```
+
+**Output in `diagnostics.json`:**
+```json
+{
+    "file": "example.d",
+    "line": 10,
+    "column": 15,
+    "type": "Error",
+    "message": "An error for CI integration."
+}
+```
+
+---
+
+## Key Takeaways
+
+- Diagnostic handlers allow custom processing of errors, warnings, and other messages.
+- They are useful for logging, IDE integrations, and enhancing error reporting.
+- Ensure the diagnostic handler is well-tested and safe for production use.
+
+Explore more diagnostic strategies in the **Diagnostics** section to further optimize your debugging workflow.

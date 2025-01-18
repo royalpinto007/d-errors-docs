@@ -1,0 +1,187 @@
+---
+title: Writing Style Guide
+group: Overview
+description: Guidelines for writing clear, consistent, and engaging documentation for D Error Insights.
+priority: 2
+---
+
+This guide provides best practices and conventions for writing high-quality documentation for **D Error Insights**. Following these guidelines ensures consistency, clarity, and a professional tone across the project.
+
+---
+
+## General Writing Guidelines
+
+### 1. Be Concise
+- Use short, clear sentences.
+- Avoid unnecessary jargon or overly complex language.
+- Example:
+  - **Good**: "Declare variables before using them."
+  - **Bad**: "Prior to utilization, variables must undergo declaration."
+
+### 2. Maintain a Neutral Tone
+- Avoid overly casual or technical slang.
+- Example:
+  - **Good**: "This function is deprecated. Use `newFunction` instead."
+  - **Bad**: "Don't use this outdated function, it’s obsolete!"
+
+### 3. Focus on the Reader
+- Assume the reader is a D developer looking for solutions.
+- Write explanations and examples that are actionable and easy to follow.
+
+---
+
+## Formatting Guidelines
+
+### 1. Headings
+- Use headings to organize content into logical sections.
+- Stick to sentence case for all headings.
+- Example:
+  ```md
+  # Error Handling Basics
+  ## Causes of Syntax Errors
+  ### Resolving Common Issues
+  ```
+
+### 2. Code Blocks
+- Always include code examples for clarity.
+- Use triple backticks for code blocks and specify the language:
+  ```d
+  void main() {
+      writeln("Hello, World!");
+  }
+  ```
+
+- Use inline code for single commands or function names:
+  - Example: Use `error()` to log error messages.
+
+### 3. Lists
+- Use ordered lists for step-by-step instructions:
+  ```md
+  1. Clone the repository.
+  2. Create a new branch.
+  3. Submit a pull request.
+  ```
+
+- Use unordered lists for general information:
+  ```md
+  - Errors
+  - Warnings
+  - Deprecations
+  ```
+
+---
+
+## Code Examples
+
+### 1. Relevance
+- Include only relevant code snippets.
+- Avoid overly long examples; focus on the part that illustrates the concept.
+
+### 2. Consistency
+- Use consistent formatting and indentation.
+- Always include a short explanation before the code block.
+
+### Example:
+```d
+// Example: Handling undefined identifiers
+void main() {
+    int x = 5; // Declare the variable
+    writeln(x);
+}
+```
+
+---
+
+## Language and Terminology
+
+### 1. Use Standard Terminology
+- Use terms consistent with the D language documentation.
+- Avoid inventing new terms unless absolutely necessary.
+
+### 2. Avoid Ambiguity
+- Be precise when referring to concepts like "errors," "warnings," or "deprecations."
+- Example:
+  - **Good**: "Warnings highlight non-critical issues."
+  - **Bad**: "Warnings are not that important."
+
+### 3. Use Inclusive Language
+- Avoid terms that may exclude or alienate readers.
+- Example:
+  - **Good**: "Ensure the code runs as expected."
+  - **Bad**: "Make sure your code isn’t stupid."
+
+---
+
+## Style Conventions
+
+### 1. Spelling and Grammar
+- Follow American English spelling conventions (e.g., "color," not "colour").
+- Proofread for grammatical accuracy.
+
+### 2. Capitalization
+- Use proper capitalization for function names, file names, and technical terms.
+- Example:
+  - `error()`, `warningSupplemental`, `DiagnosticHandler`
+
+### 3. Punctuation
+- Use proper punctuation for clarity and readability.
+- Example:
+  - **Good**: "Add a semicolon to terminate the statement."
+  - **Bad**: "Add a semicolon to terminate the statement"
+
+---
+
+## Common Mistakes to Avoid
+
+1. **Overloading with Details**
+   - Avoid including too much unrelated information in a single section.
+   - Split content into smaller, digestible parts.
+
+2. **Inconsistent Terminology**
+   - Always refer to errors, warnings, and other terms consistently throughout.
+
+3. **Missing Explanations**
+   - Always explain code snippets and examples. Don’t assume the reader knows the context.
+
+---
+
+## Examples of Well-Written Documentation
+
+### Good Example:
+```md
+### Error Handling Basics
+Use the `error()` function to log critical issues. This function increments the global error count and halts compilation.
+
+void main() {
+    error("example.d", 10, 5, "Undefined variable `x`.");
+}
+```
+
+The above code logs an error and specifies the location of the issue in the source file.
+
+### Bad Example:
+```md
+### Error Handling Basics
+This function is used for errors.
+
+void main() {
+    error("Something went wrong!");
+}
+```
+
+## Review Process
+
+All contributions must:
+1. Follow this writing style guide.
+2. Be peer-reviewed before merging into the repository.
+3. Include appropriate labels for pull requests, such as `docs` or `enhancement`.
+
+---
+
+## Key Takeaways
+
+- Keep documentation clear, concise, and actionable.
+- Maintain consistent formatting, terminology, and tone.
+- Always include relevant code examples with explanations.
+
+Thank you for helping improve **D Error Insights**! Your contributions make a difference.

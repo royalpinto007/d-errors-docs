@@ -1,0 +1,59 @@
+---
+title: Error Code 012
+group: Codes
+description: Explanation for Memory Leak Detected
+priority: 12
+---
+
+## **Overview**
+This error indicates that memory allocated during program execution was not properly released, leading to resource exhaustion over time. Memory leaks are common in programs that manage memory manually.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Forgetting to free memory allocated with `malloc` or similar functions.
+  - Circular references in garbage-collected environments.
+  - Holding references to objects that are no longer needed.
+
+- **Example**:
+```d
+import core.stdc.stdlib;
+
+void main() {
+    int* ptr = cast(int*) malloc(int.sizeof);
+    *ptr = 42;
+    // Memory leak: no call to free(ptr)
+}
+```
+
+- **Solution**:
+  - Free allocated memory when it is no longer needed:
+    ```d
+    import core.stdc.stdlib;
+
+    void main() {
+        int* ptr = cast(int*) malloc(int.sizeof);
+        *ptr = 42;
+        free(ptr); // Proper memory management
+    }
+    ```
+  - Use scope-bound resource management or RAII (Resource Acquisition Is Initialization):
+    ```d
+    struct Resource {
+        this() { writeln("Acquired resource"); }
+        ~this() { writeln("Released resource"); }
+    }
+
+    void main() {
+        {
+            auto r = Resource();
+        } // Automatically releases the resource
+    }
+    ```
+
+---
+
+## **Related Errors**
+- [Error Code 003: Access Violation](./error_code_003)
+- [Error Code 008: Division by Zero](./error_code_008)

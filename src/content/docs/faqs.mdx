@@ -1,0 +1,151 @@
+---
+title: Frequently Asked Questions
+group: Overview
+description: Answers to common questions about error handling in D.
+priority: 3
+---
+
+## 1. Why am I getting "undefined identifier" errors?
+
+### Cause:
+This happens when you reference a variable or function that hasn’t been declared or imported in the current scope.
+
+### Solution:
+- Declare or import the missing identifier.
+- Check for typos in variable or function names.
+
+### Example:
+```d
+void main() {
+    x = 5; // Error: undefined identifier `x`
+}
+```
+
+Fix:
+```d
+void main() {
+    int x = 5;
+}
+```
+
+---
+
+## 2. How do I suppress specific warnings?
+
+### Solution:
+Use the `-w` compiler flag to enable warnings globally and suppress them selectively by adjusting your code or using specific `#pragma` directives.
+
+Example:
+```d
+void main() {
+    pragma(msg, "This is a suppressed warning.");
+}
+```
+
+---
+
+## 3. What is SARIF, and why should I use it?
+
+### Answer:
+SARIF (Static Analysis Results Interchange Format) is a standard format for representing static analysis results. It:
+- Provides a structured way to report errors and warnings.
+- Integrates with CI/CD pipelines and tools like Visual Studio Code and GitHub.
+
+Use the `-verror-style=sarif` flag in DMD to generate SARIF-compliant output.
+
+---
+
+## 4. How can I debug segmentation faults in D?
+
+### Solution:
+1. Compile your program with debugging symbols (`-g` flag).
+2. Use a debugger like `gdb` to trace the error:
+    ```bash
+    gdb ./your_program
+    ```
+3. Identify and fix the root cause (e.g., invalid memory access or null pointers).
+
+---
+
+## 5. Why am I getting circular import errors?
+
+### Cause:
+Circular imports occur when two or more modules depend on each other.
+
+### Solution:
+- Refactor the modules to eliminate mutual dependencies.
+- Use an intermediary module if shared functionality is required.
+
+Example:
+```d
+// a.d
+import b;
+
+// b.d
+import a; // Error: circular dependency
+```
+
+Fix:
+```d
+// c.d (intermediary module)
+import shared_logic;
+
+// a.d
+import c;
+
+// b.d
+import c;
+```
+
+---
+
+## 6. How do I mark functions as deprecated?
+
+### Solution:
+Use the `deprecated` keyword to mark functions or features:
+```d
+void oldFunction() deprecated("Use `newFunction` instead.") {}
+
+void main() {
+    oldFunction(); // Warning: deprecated function
+}
+```
+
+---
+
+## 7. How do I handle runtime errors gracefully?
+
+### Solution:
+Use `try-catch` blocks for structured error handling:
+```d
+import std.stdio;
+
+void main() {
+    try {
+        int[] arr = [1, 2, 3];
+        writeln(arr[10]); // Index out of bounds
+    } catch (Exception e) {
+        writeln("Caught runtime error: ", e.msg);
+    }
+}
+```
+
+---
+
+## 8. How do I enable detailed error messages in D?
+
+### Solution:
+Use the `-verrors=2` flag for verbose error messages:
+```bash
+dmd -verrors=2 your_file.d
+```
+
+---
+
+## 9. Where can I find more resources on error handling in D?
+
+### Answer:
+Refer to:
+- The official [D Language Documentation](https://dlang.org/)
+- The [Phobos Standard Library Documentation](https://dlang.org/phobos/)
+- This **D Error Insights** guide!

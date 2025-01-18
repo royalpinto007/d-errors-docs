@@ -1,0 +1,45 @@
+---
+title: Error Code 006
+group: Codes
+description: Explanation for Type Mismatch
+priority: 6
+---
+
+## **Overview**
+This error occurs when the types of variables or expressions in an operation or assignment are incompatible.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Assigning a value of one type to a variable of a different type without proper conversion.
+  - Using incompatible types in arithmetic or logical operations.
+
+- **Example**:
+```d
+void main() {
+    int x = "string"; // Error: cannot assign a string to an int
+}
+```
+
+- **Solution**:
+  - Ensure type compatibility or explicitly cast values:
+    ```d
+    void main() {
+        int x = cast(int) "42"; // Proper casting
+    }
+    ```
+  - Use appropriate types in operations:
+    ```d
+    void main() {
+        int a = 10;
+        float b = 20.5;
+        float result = a + b; // Valid operation
+    }
+    ```
+
+---
+
+## **Related Errors**
+- [Error Code 002: Circular Dependency](./error_code_002)
+- [Error Code 005: Immutable Assignment](./error_code_005)

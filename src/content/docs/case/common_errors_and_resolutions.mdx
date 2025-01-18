@@ -1,0 +1,258 @@
+---
+title: Common Errors and Resolutions
+group: Case
+description: A detailed guide to common errors in D and how to resolve them.
+priority: 1
+---
+
+This section covers frequently encountered errors in D, their causes, and step-by-step solutions. Each example includes an explanation of the error and a code snippet illustrating how to fix it.
+
+---
+
+## 1. Undefined Identifier
+
+### Error Message:
+```
+Error: undefined identifier `x`
+```
+
+### Cause:
+This error occurs when you reference a variable or function that hasn’t been declared in the current scope.
+
+### Example Code:
+```d
+void main() {
+    x = 10; // Undefined variable
+}
+```
+
+### Resolution:
+Declare the variable `x` before using it:
+```d
+void main() {
+    int x = 10;
+    writeln(x);
+}
+```
+
+---
+
+## 2. Missing Semicolon
+
+### Error Message:
+```
+Error: ';' expected following statement
+```
+
+### Cause:
+A semicolon is missing at the end of a statement.
+
+### Example Code:
+```d
+void main() {
+    writeln("Hello, World!") // Missing semicolon
+}
+```
+
+### Resolution:
+Add a semicolon to terminate the statement:
+```d
+void main() {
+    writeln("Hello, World!");
+}
+```
+
+---
+
+## 3. Type Mismatch
+
+### Error Message:
+```
+Error: cannot implicitly convert expression `5.5` of type `double` to `int`
+```
+
+### Cause:
+The type of an expression doesn’t match the expected type.
+
+### Example Code:
+```d
+void main() {
+    int x = 5.5; // Type mismatch
+}
+```
+
+### Resolution:
+Use explicit type casting to convert `double` to `int`:
+```d
+void main() {
+    int x = cast(int) 5.5;
+    writeln(x);
+}
+```
+
+---
+
+## 4. Deprecated Function Usage
+
+### Warning Message:
+```
+Warning: function `foo` is deprecated
+```
+
+### Cause:
+You are using a function or feature that has been marked as deprecated and may be removed in future versions.
+
+### Example Code:
+```d
+void foo() deprecated("Use `bar` instead") {}
+
+void main() {
+    foo();
+}
+```
+
+### Resolution:
+Replace the deprecated function with its recommended alternative:
+```d
+void bar() {}
+
+void main() {
+    bar();
+}
+```
+
+---
+
+## 5. Module Not Found
+
+### Error Message:
+```
+Error: module `std.unknown` is not found
+```
+
+### Cause:
+You are importing a module that doesn’t exist or isn’t included in your project.
+
+### Example Code:
+```d
+import std.unknown;
+
+void main() {
+    writeln("Hello, World!");
+}
+```
+
+### Resolution:
+Ensure the module exists and the import statement is correct:
+```d
+import std.stdio;
+
+void main() {
+    writeln("Hello, World!");
+}
+```
+
+---
+
+## 6. Division by Zero in Compile-Time Constants
+
+### Error Message:
+```
+Error: division by zero is not allowed in constant expressions
+```
+
+### Cause:
+You attempted to divide by zero in a `constexpr` or constant expression.
+
+### Example Code:
+```d
+enum x = 10 / 0; // Division by zero
+```
+
+### Resolution:
+Ensure the divisor is non-zero:
+```d
+enum x = 10 / 2;
+```
+
+---
+
+## 7. Circular Import Dependency
+
+### Error Message:
+```
+Error: module `a` recursively imports itself
+```
+
+### Cause:
+Two or more modules depend on each other in a circular manner.
+
+### Example Code:
+```d
+// a.d
+import b;
+
+// b.d
+import a;
+```
+
+### Resolution:
+Refactor the code to remove circular dependencies:
+```d
+// a.d
+import c;
+
+// b.d
+import c;
+
+// c.d
+// Shared functionality
+```
+
+---
+
+## 8. Unreachable Code
+
+### Warning Message:
+```
+Warning: statement is not reachable
+```
+
+### Cause:
+Code appears after a `return`, `break`, or other control flow statements that prevent execution.
+
+### Example Code:
+```d
+void main() {
+    return;
+    writeln("This will never execute"); // Unreachable code
+}
+```
+
+### Resolution:
+Remove or restructure the unreachable code:
+```d
+void main() {
+    writeln("This will execute");
+}
+```
+
+---
+
+## Best Practices for Resolving Errors
+
+1. **Read the Error Message Carefully**: Understand the issue before attempting to fix it.
+2. **Use Compiler Flags**: Enable detailed error messages with flags like `-v` or `-verrors=2`.
+3. **Consult Documentation**: Refer to the official D documentation or community resources for additional help.
+4. **Break Down the Problem**: Isolate the code causing the error to debug it effectively.
+5. **Write Unit Tests**: Test edge cases to catch errors early in development.
+
+---
+
+## Key Takeaways
+
+- Most errors in D are easy to resolve once you understand the context.
+- Following best practices for debugging can save significant time.
+- Learning common error patterns helps improve code quality and developer productivity.
+
+Next, explore **Real-World Examples** to see how error-handling strategies are applied in large-scale D projects.

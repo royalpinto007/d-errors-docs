@@ -1,0 +1,58 @@
+---
+title: Error Code 010
+group: Codes
+description: Explanation for Template Instantiation Failure
+priority: 10
+---
+
+## **Overview**
+This error occurs when the compiler fails to instantiate a template due to incorrect arguments, constraints not being satisfied, or incompatible types.
+
+---
+
+## **Details**
+- **Common Causes**:
+  - Passing arguments that do not satisfy the template's constraints.
+  - Using types that are incompatible with the template definition.
+  - Syntax errors or missing parameters in the template instantiation.
+
+- **Example**:
+```d
+void main() {
+    auto result = foo!int(42); // Error: template instantiation failure
+}
+
+void foo(T)(T value) if (is(T == string)) {
+    writeln(value);
+}
+```
+
+- **Solution**:
+  - Ensure the arguments satisfy the constraints of the template:
+    ```d
+    void foo(T)(T value) if (is(T == int)) {
+        writeln(value);
+    }
+
+    void main() {
+        auto result = foo!int(42); // Valid
+    }
+    ```
+  - Verify that the syntax and parameter types match the template definition:
+    ```d
+    void bar(T)(T[] values) {
+        foreach (value; values) {
+            writeln(value);
+        }
+    }
+
+    void main() {
+        bar!int([1, 2, 3]); // Valid
+    }
+    ```
+
+---
+
+## **Related Errors**
+- [Error Code 006: Type Mismatch](./error_code_006)
+- [Error Code 009: Array Index Out of Bounds](./error_code_009)
