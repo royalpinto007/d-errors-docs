@@ -1,20 +1,58 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/* Tailwind 4 has no JS config. The palette, the dark-mode strategy and the
+   typography overrides that lived in tailwind.config.mjs are declared here.
+   darkMode: 'class' becomes this custom variant. */
+@custom-variant dark (&:where(:root.dark, :root.dark *));
+
+@theme {
+  --color-primary-50: #FAFAFB;
+  --color-primary-100: #F6F6F6;
+  --color-primary-200: #EDEDF0;
+  --color-primary-300: #DCDCE4;
+  --color-primary-400: #C0C0CF;
+  --color-primary-500: #666687;
+  --color-primary-600: #56565C;
+  --color-primary-700: #2D2D31;
+  --color-primary-800: #19191C;
+  --color-primary-900: #212134;
+}
+
+/* The typography plugin's code styling, previously configured in JS.
+
+   Deliberately NOT inside @layer: the plugin emits its own rules in a cascade
+   layer, and any layered rule loses to unlayered CSS regardless of order or
+   specificity. Inside @layer components these were silently ignored, which
+   showed up as literal backticks around inline code. */
+.prose :where(code):not(:where([class~='not-prose'] *))::before,
+.prose :where(code):not(:where([class~='not-prose'] *))::after {
+  content: '';
+}
+.prose :where(code):not(:where([class~='not-prose'] *)) {
+  background-color: var(--color-gray-100);
+  border-radius: var(--radius-md);
+  padding: 0.125rem 0.25rem;
+  font-size: 0.875em;
+}
+.prose-invert :where(code):not(:where([class~='not-prose'] *)),
+:root.dark .prose :where(code):not(:where([class~='not-prose'] *)) {
+  background-color: var(--color-gray-800);
+}
 
 /* Theme Variables */
 :root {
   --color-text-primary: #2d2d31;
   --color-text-secondary: #56565c;
-  --prism-background: theme('colors.white');
-  --prism-color: theme('colors.gray.800');
+  --prism-background: var(--color-white);
+  --prism-color: var(--color-gray-800);
 }
 
 :root.dark {
-  --color-text-primary: theme('colors.white');
-  --color-text-secondary: theme('colors.gray.300');
-  --prism-background: theme('colors.gray.800');
-  --prism-color: theme('colors.gray.200');
+  --color-text-primary: var(--color-white);
+  --color-text-secondary: var(--color-gray-300);
+  --prism-background: var(--color-gray-800);
+  --prism-color: var(--color-gray-200);
 }
 
 /* Prose Styles */

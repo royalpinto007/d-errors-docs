@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config'
 import svelte from '@astrojs/svelte'
-import tailwind from '@astrojs/tailwind'
+import tailwindcss from '@tailwindcss/vite'
 import mdx from '@astrojs/mdx'
 import vercel from '@astrojs/vercel'
 
@@ -15,12 +15,10 @@ export default defineConfig({
   },
   integrations: [
     svelte(),
-    tailwind({
-      applyBaseStyles: false,
-    }),
     mdx(),
   ],
   vite: {
+    plugins: [tailwindcss()],
     resolve: {
       alias: {
         '@': '/src',

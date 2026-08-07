@@ -36,6 +36,10 @@
 </div>
 
 <style lang="postcss">
+  /* Tailwind 4 compiles each style block in isolation, so @apply needs to
+     know which stylesheet the utilities come from. */
+  @reference '../../styles/custom.css';
+
   .card {
     @apply border border-[#DCDCE4] dark:border-gray-800 rounded-lg p-6 transition-all duration-300 ease-in-out hover:scale-[1.02] dark:bg-gray-900/50;
   }

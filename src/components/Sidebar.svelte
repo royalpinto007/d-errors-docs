@@ -83,6 +83,10 @@
 </nav>
 
 <style lang="postcss">
+  /* Tailwind 4 compiles each style block in isolation, so @apply needs to
+     know which stylesheet the utilities come from. */
+  @reference '../styles/custom.css';
+
   .active {
     @apply bg-[#F4F4F7] text-[#2D2D31] font-normal;
   }

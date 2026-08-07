@@ -39,6 +39,10 @@
 </button>
 
 <style>
+  /* Tailwind 4 compiles each style block in isolation, so @apply needs to
+     know which stylesheet the utilities come from. */
+  @reference '../styles/custom.css';
+
   :global(.hover) {
     @apply bg-gray-900 dark:bg-gray-100;
   }

@@ -7,6 +7,10 @@
 </div>
 
 <style lang="postcss">
+  /* Tailwind 4 compiles each style block in isolation, so @apply needs to
+     know which stylesheet the utilities come from. */
+  @reference '../../styles/custom.css';
+
   .card-grid {
     @apply grid gap-6;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

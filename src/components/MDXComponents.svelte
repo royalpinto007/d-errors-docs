@@ -18,6 +18,10 @@
 {/if}
 
 <style>
+  /* Tailwind 4 compiles each style block in isolation, so @apply needs to
+     know which stylesheet the utilities come from. */
+  @reference '../styles/custom.css';
+
   div :global(p:last-child) {
     @apply mb-0;
   }
