@@ -12,6 +12,9 @@ A comprehensive documentation website for understanding and resolving errors in 
 
 ## Installation
 
+Use Node.js 22.23.4 or newer (Node.js 24 LTS is supported). The patched Astro
+and Svelte integration versions require this minimum.
+
 Follow these steps to run the project locally:
 
 1. Clone the repository:
@@ -34,6 +37,23 @@ Follow these steps to run the project locally:
    ```
    http://localhost:4321
    ```
+
+## Dependency security
+
+The security update removes the unused Node server adapter; this site uses the
+Vercel adapter for its documentation routes. Astro, its integrations and the lockfile are
+updated together, and the typography selector parser is constrained to a patched
+6.x release.
+
+One upstream advisory remains: [GHSA-gcqx-w48m-w2h4](https://github.com/advisories/GHSA-gcqx-w48m-w2h4)
+affects `deepmerge`, used by the Svelte Vite plugin to merge build configuration.
+As of 14 November 2026, no patched release is published. `npm audit` reports this
+as three low findings including the two dependent packages. Do not merge
+untrusted configuration or run builds from untrusted changes with credentials.
+The advisory is not dismissed or hidden; update the plugin when a patched
+dependency becomes available. Run `npm audit`, `npm run build` and
+`npm run test:built` after updates. The smoke test renders all documentation
+routes through the built Vercel handler and checks the generated search index.
 
 ## Contributing
 
